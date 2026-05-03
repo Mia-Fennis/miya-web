@@ -1,0 +1,20 @@
+# ===== 原始备份 =====
+backups/
+
+# ===== Node / 构建工具 =====
+node_modules/
+*.log
+.env
+.env.local
+
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ===== IDE =====
+.idea/
+.vscode/
+
+# ===== 凭证文件（仅本地使用，不上传 GitHub）=====
+.git-credentials
