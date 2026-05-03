@@ -133,7 +133,8 @@ const App = {
     const hash = window.location.hash || '#/home';
     const [_, page, ...params] = hash.split('/');
 
-    // 隐藏所有页面
+    // 清理上一页可能的阅读增强元素
+    this.cleanupBlogEnhancements();
     document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
 
     // 高亮当前导航
@@ -288,6 +289,145 @@ const App = {
     }
   },
 
+  // ========== Tech Blog Reading Enhancements ==========
+
+  // Generate Table of Contents from headings
+  generateTOC(bodyEl) {
+    const headings = bodyEl.querySelectorAll('h2, h3');
+    if (headings.length === 0) return;
+
+    // Remove existing TOC
+    const existing = document.querySelector('.blog-toc');
+    if (existing) existing.remove();
+
+    const toc = document.createElement('div');
+    toc.className = 'blog-toc';
+    toc.innerHTML = '<div class="blog-toc-title">📑 目录</div>';
+    const ul = document.createElement('ul');
+
+    headings.forEach((h, i) => {
+      // Add anchor id if missing
+      if (!h.id) h.id = `toc-${i}`;
+      
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `#${h.id}`;
+      a.textContent = h.textContent;
+      a.className = h.tagName === 'H2' ? 'toc-h2' : 'toc-h3';
+      a.dataset.target = h.id;
+      
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+
+    toc.appendChild(ul);
+    document.body.appendChild(toc);
+    this.tocElement = toc;
+    this.tocLinks = toc.querySelectorAll('a');
+    this.setupTOCScrollSpy(headings);
+  },
+
+  // TOC active highlight on scroll
+  setupTOCScrollSpy(headings) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          this.tocLinks.forEach(link => {
+            link.classList.toggle('active', link.dataset.target === id);
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -60% 0px' });
+
+    headings.forEach(h => observer.observe(h));
+  },
+
+  // Back to top button
+  setupBackToTop() {
+    // Remove existing
+    const existing = document.querySelector('.back-to-top');
+    if (existing) existing.remove();
+
+    const btn = document.createElement('button');
+    btn.className = 'back-to-top';
+    btn.innerHTML = '↑';
+    btn.title = '回到顶部';
+    document.body.appendChild(btn);
+
+    const toggle = () => {
+      btn.classList.toggle('visible', window.scrollY > 400);
+    };
+    window.addEventListener('scroll', toggle, { passive: true });
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  },
+
+  // Code block copy buttons
+  setupCodeCopy(bodyEl) {
+    bodyEl.querySelectorAll('pre').forEach(pre => {
+      // Skip if already wrapped
+      if (pre.parentElement.classList.contains('code-block-wrapper')) return;
+      
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+
+      const btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.textContent = 'Copy';
+      wrapper.appendChild(btn);
+
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code') || pre;
+        try {
+          await navigator.clipboard.writeText(code.textContent);
+          btn.textContent = '✓ Copied';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        } catch (e) {
+          btn.textContent = 'Failed';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        }
+      });
+    });
+  },
+
+  // Reading progress bar
+  setupReadingProgress() {
+    const existing = document.querySelector('.read-progress');
+    if (existing) existing.remove();
+
+    const bar = document.createElement('div');
+    bar.className = 'read-progress';
+    document.body.appendChild(bar);
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.width = `${progress}%`;
+    }, { passive: true });
+  },
+
+  // Cleanup blog reading enhancements
+  cleanupBlogEnhancements() {
+    ['.blog-toc', '.back-to-top', '.read-progress'].forEach(sel => {
+      const el = document.querySelector(sel);
+      if (el) el.remove();
+    });
+  },
+
   // 解码内容（base64 反转 + UTF-8 正确处理）
   decodeContent(encoded, password) {
     try {
@@ -326,6 +466,13 @@ const App = {
           if (window.MathJax && window.MathJax.typesetPromise) {
             window.MathJax.typesetPromise([bodyEl]).catch(err => console.log('MathJax typeset error:', err));
           }
+          // Setup reading enhancements after content is rendered
+          setTimeout(() => {
+            this.generateTOC(bodyEl);
+            this.setupBackToTop();
+            this.setupCodeCopy(bodyEl);
+            this.setupReadingProgress();
+          }, 100);
         } else {
           // 密码不匹配，重新验证
           localStorage.removeItem('mia_blog_password');
@@ -365,25 +512,37 @@ const App = {
 
       btn.textContent = '验证中...';
       btn.disabled = true;
+      error.textContent = '';
 
-      // 前端验证：尝试加载内容
       try {
         const dir = category === 'diary' ? 'diary' : 'tech';
+        console.log('[DEBUG] Fetching:', `blog/encrypted/${dir}/${slug}.data`);
         const res = await fetch(`blog/encrypted/${dir}/${slug}.data`);
+        console.log('[DEBUG] Fetch status:', res.status);
         if (!res.ok) {
-          error.textContent = '文章不存在';
+          error.textContent = '文章不存在 (' + res.status + ')';
           btn.textContent = '解锁';
           btn.disabled = false;
           return;
         }
 
         const encoded = await res.text();
+        console.log('[DEBUG] Encoded length:', encoded.length);
         const decoded = this.decodeContent(encoded, password);
+        console.log('[DEBUG] Decoded:', decoded ? 'success (' + decoded.length + ' chars)' : 'null');
 
         if (decoded) {
-          // 密码正确，缓存密码并显示内容
           localStorage.setItem('mia_blog_password', password);
           bodyEl.innerHTML = Markdown.parse(decoded);
+          if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise([bodyEl]).catch(err => console.log('MathJax typeset error:', err));
+          }
+          setTimeout(() => {
+            this.generateTOC(bodyEl);
+            this.setupBackToTop();
+            this.setupCodeCopy(bodyEl);
+            this.setupReadingProgress();
+          }, 100);
         } else {
           error.textContent = '密码错误，请重试';
           input.value = '';
@@ -392,7 +551,8 @@ const App = {
           input.focus();
         }
       } catch (e) {
-        error.textContent = '网络错误，请重试';
+        console.error('[DEBUG] Submit error:', e);
+        error.textContent = '网络错误: ' + e.message;
         btn.textContent = '解锁';
         btn.disabled = false;
       }

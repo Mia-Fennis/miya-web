@@ -56,7 +56,7 @@ const Markdown = {
     });
 
     // 4. Protect HTML fold tags (details/summary)
-    html = html.replace(/<(details|summary|/details|/summary)(\s[^>]*)?>/g, (match) => {
+    html = html.replace(/<(details|summary|\/details|\/summary)(\s[^>]*)?>/g, (match) => {
       return this._save(match);
     });
 

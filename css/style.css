@@ -999,7 +999,223 @@ details > *:last-child {
   margin-bottom: 18px;
 }
 
-/* ===== 引用编号 [n] ===== */
+/* ===== Tech Blog Reading Experience: TOC + Back-to-top + Code copy ===== */
+
+/* TOC Sidebar */
+.blog-toc {
+  position: fixed;
+  right: 20px;
+  top: 90px;
+  width: 220px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  background: rgba(26, 10, 46, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 107, 157, 0.2);
+  border-radius: var(--radius-card);
+  padding: 16px;
+  z-index: 50;
+  font-size: 0.85rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,107,157,0.3) transparent;
+}
+
+.blog-toc::-webkit-scrollbar {
+  width: 4px;
+}
+.blog-toc::-webkit-scrollbar-thumb {
+  background: rgba(255,107,157,0.3);
+  border-radius: 4px;
+}
+
+.blog-toc-title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 107, 157, 0.15);
+}
+
+.blog-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blog-toc li {
+  margin-bottom: 6px;
+}
+
+.blog-toc a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+}
+
+.blog-toc a:hover {
+  color: var(--color-primary);
+  background: rgba(255, 107, 157, 0.1);
+}
+
+.blog-toc a.active {
+  color: var(--color-primary);
+  background: rgba(255, 107, 157, 0.15);
+  border-left: 2px solid var(--color-primary);
+}
+
+.toc-h2 { font-weight: 500; }
+.toc-h3 { padding-left: 14px; font-size: 0.8rem; color: var(--text-muted); }
+
+/* Hide TOC on mobile */
+@media (max-width: 1200px) {
+  .blog-toc { display: none; }
+}
+
+/* Back to top button */
+.back-to-top {
+  position: fixed;
+  bottom: 60px;
+  right: 30px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 107, 157, 0.8);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 50;
+  box-shadow: 0 0 20px rgba(255, 107, 157, 0.4);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 30px rgba(255, 107, 157, 0.6);
+}
+
+/* Code block copy button */
+.code-block-wrapper {
+  position: relative;
+  margin: 16px 0;
+}
+
+.code-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 107, 157, 0.2);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+.code-block-wrapper:hover .code-copy-btn {
+  opacity: 1;
+}
+
+.code-copy-btn:hover {
+  background: rgba(255, 107, 157, 0.2);
+  color: var(--color-primary);
+  border-color: rgba(255, 107, 157, 0.4);
+}
+
+.code-copy-btn.copied {
+  background: rgba(127, 216, 190, 0.2);
+  color: var(--color-success);
+  border-color: rgba(127, 216, 190, 0.4);
+}
+
+/* ===== Tech Blog Tables ===== */
+
+.blog-post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.9rem;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: 1px solid rgba(255, 107, 157, 0.15);
+}
+
+.blog-post-body thead {
+  background: rgba(255, 107, 157, 0.15);
+}
+
+.blog-post-body th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  border-bottom: 2px solid rgba(255, 107, 157, 0.25);
+}
+
+.blog-post-body td {
+  padding: 10px 16px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 107, 157, 0.08);
+}
+
+.blog-post-body tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.blog-post-body tbody tr:hover {
+  background: rgba(255, 107, 157, 0.06);
+  transition: background 0.2s ease;
+}
+
+.blog-post-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* MathJax formula styling */
+.blog-post-body mjx-container {
+  color: var(--text-primary) !important;
+  font-size: 1.05em;
+}
+
+.blog-post-body mjx-container[display="true"] {
+  margin: 16px 0 !important;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+/* Progress bar for reading */
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  z-index: 200;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+}
 .ref-link {
   display: inline-block;
   font-size: 0.75rem;
