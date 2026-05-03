@@ -279,57 +279,51 @@ const App = {
       <span class="post-badge ${post.category}">${this.blogCategories[post.category].emoji} ${this.blogCategories[post.category].label}</span>
     `;
 
-    // 本地访问直接加载文件，远程访问需要密码验证
-    if (this.isLocalAccess()) {
-      await this.loadBlogMarkdownLocal(slug, post.category, bodyEl);
+    // 检查是否有已验证的密码（localStorage 中缓存）
+    const savedPassword = localStorage.getItem('mia_blog_password');
+    if (savedPassword) {
+      await this.loadBlogContent(slug, post.category, bodyEl, savedPassword);
     } else {
-      await this.loadBlogMarkdownRemote(slug, post.category, bodyEl);
+      this.renderPasswordGate(slug, post.category, bodyEl);
     }
   },
 
-  // 判断是否为本地访问
-  isLocalAccess() {
-    const host = window.location.hostname;
-    return host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.');
+  // 解码内容（base64 反转）
+  decodeContent(encoded, password) {
+    try {
+      // 反转字符串
+      const reversed = encoded.split('').reverse().join('');
+      // base64 解码
+      const decoded = atob(reversed);
+      // 去掉密码前缀（格式: "密码::内容"）
+      const prefix = password + '::';
+      if (decoded.startsWith(prefix)) {
+        return decoded.slice(prefix.length);
+      }
+      // 如果前缀不匹配，可能是密码换了，返回 null
+      return null;
+    } catch (e) {
+      return null;
+    }
   },
 
-  // 本地加载 Markdown（原逻辑）
-  async loadBlogMarkdownLocal(slug, category, bodyEl) {
+  // 加载博客内容（从加密文件）
+  async loadBlogContent(slug, category, bodyEl, password) {
     const dir = category === 'diary' ? 'diary' : 'tech';
     try {
-      const res = await fetch(`blog/${dir}/${slug}.md`);
+      const res = await fetch(`blog/encrypted/${dir}/${slug}.data`);
       if (res.ok) {
-        const md = await res.text();
-        bodyEl.innerHTML = Markdown.parse(md);
+        const encoded = await res.text();
+        const decoded = this.decodeContent(encoded, password);
+        if (decoded) {
+          bodyEl.innerHTML = Markdown.parse(decoded);
+        } else {
+          // 密码不匹配，重新验证
+          localStorage.removeItem('mia_blog_password');
+          this.renderPasswordGate(slug, category, bodyEl, true);
+        }
       } else {
         bodyEl.innerHTML = '<p>文章内容加载失败。</p>';
-      }
-    } catch (e) {
-      bodyEl.innerHTML = '<p>本地文件访问受限，请通过本地服务器打开。</p>';
-    }
-  },
-
-  // 远程加载 Markdown（后端密码验证）
-  async loadBlogMarkdownRemote(slug, category, bodyEl) {
-    const token = localStorage.getItem('mia_blog_token');
-
-    if (!token) {
-      this.renderPasswordGate(slug, bodyEl);
-      return;
-    }
-
-    // 尝试用 token 加载内容
-    try {
-      const res = await fetch(`/api/blog?slug=${category}/${slug}&token=${token}`);
-      const data = await res.json();
-      if (data.success) {
-        bodyEl.innerHTML = Markdown.parse(data.content);
-      } else if (res.status === 401) {
-        // token 过期/无效，重新验证
-        localStorage.removeItem('mia_blog_token');
-        this.renderPasswordGate(slug, bodyEl);
-      } else {
-        bodyEl.innerHTML = `<p>加载失败：${data.message || '未知错误'}</p>`;
       }
     } catch (e) {
       bodyEl.innerHTML = '<p>网络错误，请检查连接后重试。</p>';
@@ -337,12 +331,13 @@ const App = {
   },
 
   // 渲染密码输入框
-  renderPasswordGate(slug, bodyEl) {
+  renderPasswordGate(slug, category, bodyEl, isRetry = false) {
     bodyEl.innerHTML = `
       <div class="password-gate">
         <div class="password-gate-icon">🔒</div>
         <h3 class="password-gate-title">博客内容受保护</h3>
         <p class="password-gate-desc">此内容为私人日记/技术笔记，请输入密码查看</p>
+        ${isRetry ? '<p class="password-gate-notice" style="color: #ff6b9d;">⚠️ 密码已更换或输入错误，请重新输入</p>' : ''}
         <div class="password-gate-form">
           <input type="password" class="password-input" id="blog-password" placeholder="输入密码..." />
           <button class="password-submit" id="password-submit">解锁</button>
@@ -362,18 +357,24 @@ const App = {
       btn.textContent = '验证中...';
       btn.disabled = true;
 
+      // 前端验证：尝试加载内容
       try {
-        const res = await fetch('/api/auth', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password })
-        });
-        const data = await res.json();
+        const dir = category === 'diary' ? 'diary' : 'tech';
+        const res = await fetch(`blog/encrypted/${dir}/${slug}.data`);
+        if (!res.ok) {
+          error.textContent = '文章不存在';
+          btn.textContent = '解锁';
+          btn.disabled = false;
+          return;
+        }
 
-        if (data.success) {
-          localStorage.setItem('mia_blog_token', data.token);
-          // 重新加载当前文章
-          this.loadBlogMarkdownRemote(slug, this.data.blogs.find(p => p.slug === slug).category, bodyEl);
+        const encoded = await res.text();
+        const decoded = this.decodeContent(encoded, password);
+
+        if (decoded) {
+          // 密码正确，缓存密码并显示内容
+          localStorage.setItem('mia_blog_password', password);
+          bodyEl.innerHTML = Markdown.parse(decoded);
         } else {
           error.textContent = '密码错误，请重试';
           input.value = '';
