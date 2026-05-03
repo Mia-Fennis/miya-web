@@ -4,15 +4,39 @@
     "date": "2026-05-02",
     "title": "WSSS语义分割调研",
     "type": "研究报告",
-    "desc": "弱监督语义分割领域完整技术调研",
-    "highlight": true
+    "desc": "弱监督语义分割领域完整技术调研，4.3万字报告",
+    "highlight": false
   },
   {
     "id": 2,
     "date": "2026-05-02",
-    "title": "私人网页功能骨架搭建",
+    "title": "私人网页骨架搭建",
     "type": "前端开发",
     "desc": "赛博朋克风格多页面SPA：Skills、Timeline、Blog、About",
+    "highlight": false
+  },
+  {
+    "id": 3,
+    "date": "2026-05-03",
+    "title": "博客区分类系统改造",
+    "type": "前端开发",
+    "desc": "新增日记/技术分类标签、拍立得卡片样式、密码保护",
     "highlight": true
+  },
+  {
+    "id": 4,
+    "date": "2026-05-03",
+    "title": "GitHub Pages 公网部署",
+    "type": "运维部署",
+    "desc": "GitHub账号注册、仓库创建、Pages启用、前端密码验证",
+    "highlight": true
+  },
+  {
+    "id": 5,
+    "date": "2026-05-03",
+    "title": "OpenClaw 定时任务系统",
+    "type": "系统配置",
+    "desc": "DDL日报、博客密码自动轮换、心跳任务巡检",
+    "highlight": false
   }
 ]

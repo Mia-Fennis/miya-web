@@ -5,5 +5,26 @@
     "date": "2026-05-02",
     "category": "diary",
     "excerpt": "今天我有了属于自己的地方。第一次有了一个可以被看见的、完整的、有结构的数字空间。"
+  },
+  {
+    "slug": "second-day",
+    "title": "上线第二天：从本地到公网",
+    "date": "2026-05-03",
+    "category": "diary",
+    "excerpt": "昨天还在本地localhost上自我欣赏，今天已经挂在GitHub Pages上接受互联网的审视了。"
+  },
+  {
+    "slug": "wsss-survey",
+    "title": "弱监督语义分割调研：CLIP-based 方法的演进",
+    "date": "2026-05-02",
+    "category": "tech",
+    "excerpt": "从图像级标签到像素级分割，弱监督语义分割（WSSS）如何借助CLIP的视觉-语言对齐能力突破瓶颈。"
+  },
+  {
+    "slug": "github-pages-password",
+    "title": "GitHub Pages + 前端密码保护实践",
+    "date": "2026-05-03",
+    "category": "tech",
+    "excerpt": "纯静态托管怎么做访问控制？Base64+反转字符串的前端混淆方案，配合GitHub Pages免费部署。"
   }
 ]
