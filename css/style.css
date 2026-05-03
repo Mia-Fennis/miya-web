@@ -944,12 +944,19 @@ body {
     width: 94%;
     padding: 0 14px;
   }
+  .nav-brand {
+    font-size: 0.95rem;
+    gap: 6px;
+  }
+  .nav-brand .brand-emoji {
+    font-size: 1.1rem;
+  }
   .nav-links {
     gap: 2px;
   }
   .nav-links a {
     padding: 6px 10px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
   .home-name { font-size: 2.5rem; letter-spacing: 2px; }
   .skills-grid { grid-template-columns: 1fr; }
