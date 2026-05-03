@@ -937,6 +937,135 @@ body {
   50%      { opacity: 0.3; }
 }
 
+/* ===== 折叠章节（details/summary）===== */
+details {
+  margin: 16px 0;
+  border: 1px solid rgba(255, 107, 157, 0.15);
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+}
+
+summary {
+  cursor: pointer;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--color-primary);
+  background: rgba(255, 107, 157, 0.06);
+  border-bottom: 1px solid rgba(255, 107, 157, 0.1);
+  transition: background 0.2s ease;
+  user-select: none;
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::before {
+  content: '▸ ';
+  color: var(--color-accent);
+  font-size: 1rem;
+  margin-right: 6px;
+}
+
+details[open] > summary::before {
+  content: '▾ ';
+}
+
+summary:hover {
+  background: rgba(255, 107, 157, 0.12);
+}
+
+details > .blog-post-body,
+details > p,
+details > h1,
+details > h2,
+details > h3,
+details > ul,
+details > ol,
+details > blockquote,
+details > table,
+details > pre {
+  padding: 0 18px;
+}
+
+details > *:first-child:not(summary) {
+  margin-top: 14px;
+}
+
+details > *:last-child {
+  margin-bottom: 18px;
+}
+
+/* ===== 引用编号 [n] ===== */
+.ref-link {
+  display: inline-block;
+  font-size: 0.75rem;
+  vertical-align: super;
+  line-height: 1;
+  color: var(--color-accent);
+  text-decoration: none;
+  margin-left: 2px;
+}
+
+.ref-link:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+/* ===== 参考文献列表 ===== */
+.ref-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.ref-list li {
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--color-primary);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0 var(--radius-small) var(--radius-small) 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.ref-list li .ref-num {
+  display: inline-block;
+  min-width: 28px;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+/* ===== AI 声明区块 ===== */
+.ai-disclaimer {
+  margin-top: 32px;
+  padding: 20px 24px;
+  border: 1px dashed rgba(168, 216, 234, 0.3);
+  border-radius: var(--radius-card);
+  background: rgba(168, 216, 234, 0.04);
+}
+
+.ai-disclaimer h3 {
+  color: var(--color-accent);
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.ai-disclaimer p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.ai-disclaimer a {
+  color: var(--color-accent);
+}
+
 /* ===== 移动端适配 ===== */
 @media (max-width: 768px) {
   .top-nav {

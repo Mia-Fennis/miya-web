@@ -322,6 +322,10 @@ const App = {
         const decoded = this.decodeContent(encoded, password);
         if (decoded) {
           bodyEl.innerHTML = Markdown.parse(decoded);
+          // Trigger MathJax typeset for newly injected math
+          if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise([bodyEl]).catch(err => console.log('MathJax typeset error:', err));
+          }
         } else {
           // 密码不匹配，重新验证
           localStorage.removeItem('mia_blog_password');

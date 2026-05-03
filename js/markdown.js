@@ -1,22 +1,70 @@
-// Minimal Markdown parser for local use
+// Enhanced Markdown parser for Mia's blog
 // Supports: headers, bold, italic, inline-code, code-blocks, lists, blockquotes, links, hr, paragraphs
+// NEW: LaTeX math ($...$ / $$...$$) preservation, HTML details/summary preservation
 
 const Markdown = {
+  // Counter for placeholders
+  _phId: 0,
+  _placeholders: {},
+
+  _reset() {
+    this._phId = 0;
+    this._placeholders = {};
+  },
+
+  _save(content) {
+    const id = `__PH_${this._phId++}__`;
+    this._placeholders[id] = content;
+    return id;
+  },
+
+  _restore(html) {
+    for (const [id, content] of Object.entries(this._placeholders)) {
+      html = html.split(id).join(content);
+    }
+    return html;
+  },
+
   parse(text) {
     if (!text) return '';
+    this._reset();
+
     let html = text
       .replace(/\r\n/g, '\n')
       .replace(/\r/g, '\n');
 
-    // Escape HTML entities
-    html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-    // Code blocks (fenced)
+    // === PROTECTION PHASE ===
+    // 1. Protect fenced code blocks FIRST (so math inside code isn't touched)
+    const codeBlocks = [];
     html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
-      return `<pre class="code-block"><code>${code.trimEnd()}</code></pre>`;
+      const placeholder = this._save(`<pre class="code-block"><code>${code.trimEnd()}</code></pre>`);
+      codeBlocks.push(placeholder);
+      return placeholder;
     });
 
-    // Inline code
+    // 2. Protect display math $$...$$
+    html = html.replace(/\$\$([\s\S]*?)\$\$/g, (match, math) => {
+      return this._save(`$$${math}$$`);
+    });
+
+    // 3. Protect inline math $...$ (must be non-greedy, avoid $ in text)
+    // Only match when there's actual content between $ and $, and it's not adjacent to another $
+    html = html.replace(/(?<!\$)\$(?!\$)([^\$\n]+?)\$(?!\$)/g, (match, math) => {
+      // Skip if it looks like money or table separator (pure digits or spaces)
+      if (/^\s*\d+\s*$/.test(math)) return match;
+      return this._save(`$${math}$`);
+    });
+
+    // 4. Protect HTML fold tags (details/summary)
+    html = html.replace(/<(details|summary|/details|/summary)(\s[^>]*)?>/g, (match) => {
+      return this._save(match);
+    });
+
+    // === MARKDOWN PARSING PHASE ===
+    // Escape remaining HTML entities
+    html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Inline code (not inside pre)
     html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
 
     // Headers
@@ -40,7 +88,7 @@ const Markdown = {
     // Links
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
-    // Lists (simple: process line by line)
+    // Lists
     const lines = html.split('\n');
     const out = [];
     let inUl = false;
@@ -59,7 +107,6 @@ const Markdown = {
         if (!inOl) { out.push('<ol>'); inOl = true; }
         out.push(`<li>${olMatch[2]}</li>`);
       } else if (indentUl && inUl) {
-        // nested inside previous li
         out[out.length - 1] = out[out.length - 1].replace(/<\/li>$/, '');
         out.push(`<ul><li>${indentUl[2]}</li></ul></li>`);
       } else {
@@ -73,17 +120,21 @@ const Markdown = {
 
     html = out.join('\n');
 
-    // Paragraphs: wrap non-tag lines in <p>
+    // Paragraphs
     html = html.split('\n').map(line => {
       const trimmed = line.trim();
       if (!trimmed) return '';
       if (trimmed.startsWith('<')) return line;
+      if (trimmed.startsWith('__PH_')) return line; // skip protected placeholders
       return `<p>${trimmed}</p>`;
     }).join('\n');
 
-    // Clean up empty paragraphs
+    // Clean up
     html = html.replace(/<p><\/p>/g, '');
     html = html.replace(/\n{2,}/g, '\n');
+
+    // === RESTORATION PHASE ===
+    html = this._restore(html);
 
     return html;
   }

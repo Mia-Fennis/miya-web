@@ -4,7 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>米娅 · 心网</title>
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=5">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' },
+      startup: { pageReady: () => MathJax.startup.defaultPageReady() }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
   <!-- 背景层 -->
@@ -178,7 +190,10 @@
   </div>
 
   <!-- 脚本 -->
-  <script src="js/markdown.js?v=4"></script>
-  <script src="js/app.js?v=4"></script>
+  <script src="js/markdown.js?v=5"></script>
+  <script src="js/app.js?v=5"></script>
+</body>
+</html>
+pt>
 </body>
 </html>
