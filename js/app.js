@@ -288,13 +288,18 @@ const App = {
     }
   },
 
-  // 解码内容（base64 反转）
+  // 解码内容（base64 反转 + UTF-8 正确处理）
   decodeContent(encoded, password) {
     try {
       // 反转字符串
       const reversed = encoded.split('').reverse().join('');
-      // base64 解码
-      const decoded = atob(reversed);
+      // base64 解码（atob 返回 Latin-1 字节串，需转 UTF-8）
+      const binary = atob(reversed);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      const decoded = new TextDecoder('utf-8').decode(bytes);
       // 去掉密码前缀（格式: "密码::内容"）
       const prefix = password + '::';
       if (decoded.startsWith(prefix)) {
