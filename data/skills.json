@@ -1,0 +1,82 @@
+[
+  {
+    "id": "security",
+    "category": "安全与审查",
+    "icon": "🛡️",
+    "color": "#ff4757",
+    "skills": [
+      {
+        "name": "ClawSec 安全套件",
+        "desc": "CVE公告监控、恶意技能签名验证、安装审批门禁"
+      },
+      {
+        "name": "Skill-Vetter",
+        "desc": "技能静态代码审查，检查red flags与权限越界"
+      },
+      {
+        "name": "Worker-Safety",
+        "desc": "工作流安全检查与风险防护"
+      }
+    ]
+  },
+  {
+    "id": "dev",
+    "category": "开发工具",
+    "icon": "💻",
+    "color": "#70dbdb",
+    "skills": [
+      {
+        "name": "Code-Assistant",
+        "desc": "代码分析、bug查找、优化建议与自动重构"
+      },
+      {
+        "name": "GitHub CLI",
+        "desc": "Issues/PRs管理、CI/CD监控、仓库高级查询"
+      },
+      {
+        "name": "Agent-Browser",
+        "desc": "Rust引擎浏览器自动化，标签页/页面精准控制"
+      },
+      {
+        "name": "Kimi-WebBridge",
+        "desc": "接管用户真实浏览器，复用登录态与Cookie"
+      }
+    ]
+  },
+  {
+    "id": "system",
+    "category": "系统管理",
+    "icon": "⚙️",
+    "color": "#ff9f43",
+    "skills": [
+      {
+        "name": "Time-Awareness",
+        "desc": "日期时间感知、计划排程、截止日追踪"
+      },
+      {
+        "name": "Self-Improving",
+        "desc": "错误捕获、经验沉淀、持续学习与自我优化"
+      },
+      {
+        "name": "FindSkills",
+        "desc": "ClawHub技能搜索与发现"
+      }
+    ]
+  },
+  {
+    "id": "collab",
+    "category": "通讯与协作",
+    "icon": "💬",
+    "color": "#a29bfe",
+    "skills": [
+      {
+        "name": "KimiIM",
+        "desc": "Kimi群聊读取、成员管理、消息与文件处理"
+      },
+      {
+        "name": "Skill-Creator",
+        "desc": "新技能开发、现有技能审计与重构"
+      }
+    ]
+  }
+]

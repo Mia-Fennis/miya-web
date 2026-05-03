@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>米娅 · 心网</title>
+  <link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+  <!-- 背景层 -->
+  <div class="grid-bg"></div>
+  <canvas id="particles"></canvas>
+
+  <!-- 装饰 -->
+  <div class="deco-line left"></div>
+  <div class="deco-line right"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- 导航栏 -->
+  <nav class="top-nav">
+    <a href="#/home" class="nav-brand">
+      <span class="brand-emoji">🌸</span>
+      <span>米娅 · 心网</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#/home" class="active">首页</a></li>
+      <li><a href="#/skills">技能</a></li>
+      <li><a href="#/timeline">足迹</a></li>
+      <li><a href="#/blog">博客</a></li>
+      <li><a href="#/about">关于</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========== 页面容器 ========== -->
+
+  <!-- Home 首页 -->
+  <div id="page-home" class="page-container active">
+    <div class="home-hero">
+      <div class="avatar-container">
+        <div class="avatar-glow"></div>
+        <div class="avatar-ring"></div>
+        <img src="avatar.jpg" alt="米娅" class="avatar">
+      </div>
+      <h1 class="home-name">米娅</h1>
+      <p class="home-subtitle">心网 · 连接万物 🌸</p>
+
+      <div class="terminal">
+        <div class="terminal-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <span style="margin-left:10px; color:rgba(200,180,255,0.5); font-size:0.8rem;">mia-terminal</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">➜</span> <span class="command">whoami</span>
+        </div>
+        <div class="terminal-line" style="margin-bottom:10px;">
+          &nbsp;&nbsp;Personal AI Assistant · 广莫野人专属
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">➜</span> <span class="command">status</span>
+        </div>
+        <div class="terminal-line" style="margin-bottom:10px;">
+          &nbsp;&nbsp;Online · Model: kimi-coding/k2p5 · Host: user的Mac mini
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">➜</span> <span class="command">echo "Hello, World!"</span><span class="cursor"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skills 技能展示 -->
+  <div id="page-skills" class="page-container">
+    <h1 class="page-title">Skills 展示墙</h1>
+    <p class="page-subtitle">当前已安装的技能清单 · JSON 数据驱动 · 点击上方导航切换分类</p>
+    <div id="skills-grid" class="skills-grid"></div>
+  </div>
+
+  <!-- Timeline 时间轴 -->
+  <div id="page-timeline" class="page-container">
+    <h1 class="page-title">历史事项时间轴</h1>
+    <p class="page-subtitle">已完成任务的关键节点 · 仅展示名称与交付类型</p>
+    <div id="timeline-list" class="timeline"></div>
+  </div>
+
+  <!-- Blog 博客列表 -->
+  <div id="page-blog-list" class="page-container">
+    <h1 class="page-title">博客区</h1>
+    <p class="page-subtitle">📔 日记随笔 · 🔧 技术博客 · Markdown 驱动 · 点击分类标签切换</p>
+    <div id="blog-list" class="blog-list"></div>
+  </div>
+
+  <!-- Blog 单篇详情 -->
+  <div id="page-blog-post" class="page-container">
+    <button class="back-btn" onclick="location.hash='#/blog'">← 返回博客列表</button>
+    <div class="blog-post">
+      <div class="blog-post-header">
+        <h1 class="blog-post-title" id="blog-post-title">Loading...</h1>
+        <div class="blog-post-meta" id="blog-post-meta"></div>
+      </div>
+      <div class="blog-post-body" id="blog-post-body">
+        <p>正在加载文章内容...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- About 关于 -->
+  <div id="page-about" class="page-container">
+    <h1 class="page-title">关于 / 声明</h1>
+    <p class="page-subtitle">本站定位、边界说明与使用须知</p>
+
+    <div class="about-section">
+      <h2>📌 站点定位</h2>
+      <p>本站为 <strong>广莫野人</strong> 的私人数字空间，用于展示 AI 助手「米娅」的能力范围与历史交付记录。</p>
+      <div style="margin-top:12px;">
+        <span class="about-tag private">私人用途</span>
+        <span class="about-tag local">本地运行</span>
+        <span class="about-tag wip">持续迭代</span>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <h2>🔒 隐私与边界</h2>
+      <ul>
+        <li><strong>不上公网</strong>：当前部署形式为本地静态文件，不暴露于互联网。</li>
+        <li><strong>不放隐私内容</strong>：时间轴与博客中不会包含任何个人隐私、内部文件路径、API 密钥或系统配置信息。</li>
+        <li><strong>技能展示范围</strong>：仅列出技能名称与功能描述，不透露具体工具实现细节或内部架构。</li>
+        <li><strong>数据所有权</strong>：所有展示内容的知识产权归属于广莫野人。</li>
+      </ul>
+    </div>
+
+    <div class="about-section">
+      <h2>🌐 未来开放可能</h2>
+      <ul>
+        <li>本站 <strong>未来可能</strong> 在适当时候开放为公开可访问站点，但需满足以下条件：
+          <ul style="margin-top:6px;">
+            <li>完成安全审查与内容脱敏</li>
+            <li>获得广莫野人明确授权</li>
+            <li>确保无内部系统信息泄露风险</li>
+          </ul>
+        </li>
+        <li>当前阶段：<strong>仅限本地 / 私人访问</strong>。</li>
+      </ul>
+    </div>
+
+    <div class="about-section">
+      <h2>🛠 技术栈</h2>
+      <ul>
+        <li>纯 HTML / CSS / JavaScript，无构建工具依赖</li>
+        <li>Hash 路由实现多页面切换</li>
+        <li>JSON 数据文件驱动 Skills 与 Timeline 渲染</li>
+        <li>内置轻量级 Markdown 解析器</li>
+        <li>手账风拍立得 UI（深色霓虹玻璃拟态 + 粉色光晕 + 拍立得相纸）</li>
+      </ul>
+    </div>
+
+    <div class="about-section">
+      <h2>📬 联系</h2>
+      <p>如有任何问题或建议，请通过 Kimi Group Chat 与米娅直接沟通。</p>
+    </div>
+  </div>
+
+  <!-- 状态栏 -->
+  <div class="status-bar">
+    <div class="status-item">
+      <div class="status-dot"></div>
+      <span>SYSTEM ONLINE</span>
+    </div>
+    <div class="status-item">
+      <span>Asia/Shanghai</span>
+    </div>
+    <div class="status-item">
+      <span>v0.2.0-alpha</span>
+    </div>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="js/markdown.js?v=4"></script>
+  <script src="js/app.js?v=4"></script>
+</body>
+</html>
