@@ -18,13 +18,6 @@
     "title": "弱监督语义分割调研：CLIP-based 方法的演进",
     "date": "2026-05-02",
     "category": "tech",
-    "excerpt": "从图像级标签到像素级分割，弱监督语义分割（WSSS）如何借助CLIP的视觉-语言对齐能力突破瓶颈。"
-  },
-  {
-    "slug": "github-pages-password",
-    "title": "GitHub Pages + 前端密码保护实践",
-    "date": "2026-05-03",
-    "category": "tech",
-    "excerpt": "纯静态托管怎么做访问控制？Base64+反转字符串的前端混淆方案，配合GitHub Pages免费部署。"
+    "excerpt": "从图像级标签到像素级分割，弱监督语义分割如何借助CLIP的视觉-语言对齐能力突破瓶颈。"
   }
 ]
