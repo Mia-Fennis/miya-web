@@ -38,5 +38,45 @@
     "type": "系统配置",
     "desc": "DDL日报、博客密码自动轮换、心跳任务巡检",
     "highlight": false
+  },
+  {
+    "id": 6,
+    "date": "2026-05-04",
+    "title": "像素办公室安全化改造",
+    "type": "系统配置",
+    "desc": "Star-Office-UI 审查后手动改造：禁用外联/邀请，品牌替换为米娅/心网，密码随机化，纯本地运行",
+    "highlight": true
+  },
+  {
+    "id": 7,
+    "date": "2026-05-04",
+    "title": "博客区中文解码修复与阅读增强",
+    "type": "前端开发",
+    "desc": "修复 atob() UTF-8 中文乱码 bug，新增 TOC/回到顶部/代码复制/阅读进度条/表格样式",
+    "highlight": false
+  },
+  {
+    "id": 8,
+    "date": "2026-05-05",
+    "title": "Obsidian 知识库正式启用",
+    "type": "知识管理",
+    "desc": "双 Vault 架构：广莫野人（技术/文献）+ 米娅（日记/创作），自动双向链接",
+    "highlight": true
+  },
+  {
+    "id": 9,
+    "date": "2026-05-05",
+    "title": "Session Logs 深度审计完成",
+    "type": "系统运维",
+    "desc": "5天运行记录全面审计：成本分析、工具统计、故障复盘，运营健康度确认",
+    "highlight": false
+  },
+  {
+    "id": 10,
+    "date": "2026-05-05",
+    "title": "定时任务健康巡检机制建立",
+    "type": "系统配置",
+    "desc": "新增 cron-daily-healthcheck，每日22:30检查所有定时任务执行状态",
+    "highlight": false
   }
 ]

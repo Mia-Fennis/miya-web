@@ -60,6 +60,18 @@
       {
         "name": "FindSkills",
         "desc": "ClawHub技能搜索与发现"
+      },
+      {
+        "name": "Mia-Office-UI",
+        "desc": "像素办公室状态看板，实时展示后台任务执行状态"
+      },
+      {
+        "name": "Weather",
+        "desc": "wttr.in/Open-Meteo天气查询，带伞/穿衣/紫外线提醒"
+      },
+      {
+        "name": "Session-Logs",
+        "desc": "运行日志审计：成本统计、工具使用分析、故障复盘"
       }
     ]
   },
