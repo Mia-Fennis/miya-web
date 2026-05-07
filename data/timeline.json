@@ -78,5 +78,21 @@
     "type": "系统配置",
     "desc": "新增 cron-daily-healthcheck，每日22:30检查所有定时任务执行状态",
     "highlight": false
+  },
+  {
+    "id": 11,
+    "date": "2026-05-06",
+    "title": "心跳系统减法重构",
+    "type": "系统设计",
+    "desc": "取消臃肿伪心跳，拆分为独立轻量任务。庄子无用之用与DiffCLIP减法注意力的技术映射",
+    "highlight": false
+  },
+  {
+    "id": 12,
+    "date": "2026-05-07",
+    "title": "双 OpenClaw 实例并行运行",
+    "type": "系统配置",
+    "desc": "安装纯开源OpenClaw作为备用实例，与主实例形成冗余",
+    "highlight": true
   }
 ]
