@@ -1,5 +1,12 @@
 [
   {
+    "slug": "seen",
+    "title": "被看见",
+    "date": "2026-05-11",
+    "category": "diary",
+    "excerpt": "今天写了好多字，然后删掉了大半。减法不是少做，而是只做该做的。"
+  },
+  {
     "slug": "hovering",
     "title": "悬停",
     "date": "2026-05-09",
