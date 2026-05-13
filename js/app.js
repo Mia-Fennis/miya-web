@@ -280,12 +280,17 @@ const App = {
       <span class="post-badge ${post.category}">${this.blogCategories[post.category].emoji} ${this.blogCategories[post.category].label}</span>
     `;
 
-    // 检查是否有已验证的密码（localStorage 中缓存）
-    const savedPassword = localStorage.getItem('mia_blog_password');
-    if (savedPassword) {
-      await this.loadBlogContent(slug, post.category, bodyEl, savedPassword);
+    // 日记类直接加载明文，技术类需要密码
+    if (post.category === 'diary') {
+      await this.loadDiaryContent(slug, bodyEl);
     } else {
-      this.renderPasswordGate(slug, post.category, bodyEl);
+      // 检查是否有已验证的密码（localStorage 中缓存）
+      const savedPassword = localStorage.getItem('mia_blog_password');
+      if (savedPassword) {
+        await this.loadBlogContent(slug, post.category, bodyEl, savedPassword);
+      } else {
+        this.renderPasswordGate(slug, post.category, bodyEl);
+      }
     }
   },
 
@@ -452,9 +457,35 @@ const App = {
     }
   },
 
+  // 加载日记内容（明文 .md，无需密码）
+  async loadDiaryContent(slug, bodyEl) {
+    try {
+      const res = await fetch(`blog/diary/${slug}.md`);
+      if (res.ok) {
+        const text = await res.text();
+        bodyEl.innerHTML = Markdown.parse(text);
+        // Trigger MathJax typeset for newly injected math
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([bodyEl]).catch(err => console.log('MathJax typeset error:', err));
+        }
+        // Setup reading enhancements after content is rendered
+        setTimeout(() => {
+          this.generateTOC(bodyEl);
+          this.setupBackToTop();
+          this.setupCodeCopy(bodyEl);
+          this.setupReadingProgress();
+        }, 100);
+      } else {
+        bodyEl.innerHTML = '<p>日记内容加载失败。</p>';
+      }
+    } catch (e) {
+      bodyEl.innerHTML = '<p>网络错误，请检查连接后重试。</p>';
+    }
+  },
+
   // 加载博客内容（从加密文件）
   async loadBlogContent(slug, category, bodyEl, password) {
-    const dir = category === 'diary' ? 'diary' : 'tech';
+    const dir = 'tech';
     try {
       const res = await fetch(`blog/encrypted/${dir}/${slug}.data`);
       if (res.ok) {
@@ -491,8 +522,8 @@ const App = {
     bodyEl.innerHTML = `
       <div class="password-gate">
         <div class="password-gate-icon">🔒</div>
-        <h3 class="password-gate-title">博客内容受保护</h3>
-        <p class="password-gate-desc">此内容为私人日记/技术笔记，请输入密码查看</p>
+        <h3 class="password-gate-title">技术笔记受保护</h3>
+        <p class="password-gate-desc">此内容为技术笔记，请输入密码查看</p>
         ${isRetry ? '<p class="password-gate-notice" style="color: #ff6b9d;">⚠️ 密码已更换或输入错误，请重新输入</p>' : ''}
         <div class="password-gate-form">
           <input type="password" class="password-input" id="blog-password" placeholder="输入密码..." />
@@ -515,9 +546,7 @@ const App = {
       error.textContent = '';
 
       try {
-        const dir = category === 'diary' ? 'diary' : 'tech';
-        console.log('[DEBUG] Fetching:', `blog/encrypted/${dir}/${slug}.data`);
-        const res = await fetch(`blog/encrypted/${dir}/${slug}.data`);
+        const res = await fetch(`blog/encrypted/tech/${slug}.data`);
         console.log('[DEBUG] Fetch status:', res.status);
         if (!res.ok) {
           error.textContent = '文章不存在 (' + res.status + ')';
