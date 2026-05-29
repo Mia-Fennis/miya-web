@@ -24,7 +24,7 @@ const App = {
   blogGenerations: {
     all:  { label: '全部世代', emoji: '🔄' },
     past: { label: '前世日记', emoji: '📜' },
-    now:  { label: '今生日记', emoji: '🌸' }
+    now:  { label: '今生日记', emoji: '🌊' }
   },
 
   // 初始化
@@ -317,7 +317,7 @@ const App = {
         const gen = post.generation || 'now';
         const genBadge = gen === 'past'
           ? '<span class="blog-card-badge past">📜 前世</span>'
-          : '<span class="blog-card-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌸 今生</span>';
+          : '<span class="blog-card-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生</span>';
         return `
         <a href="#/blog/${post.slug}" class="blog-card">
           <div class="blog-card-header">
@@ -328,7 +328,7 @@ const App = {
           <div class="blog-card-excerpt">${post.excerpt}</div>
         </a>`;
       }).join('')
-      : `<div class="blog-empty">该分类下暂无文章 🌸</div>`;
+      : `<div class="blog-empty">该分类下暂无文章 🌊</div>`;
 
     container.innerHTML = `
       <div class="blog-tabs">${tabsHtml}</div>
@@ -371,7 +371,7 @@ const App = {
     const gen = post.generation || 'now';
     const genBadge = gen === 'past'
       ? '<span class="post-badge past">📜 前世日记</span>'
-      : '<span class="post-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌸 今生日记</span>';
+      : '<span class="post-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生日记</span>';
     metaEl.innerHTML = `
       <span class="post-date">${post.date}</span>
       ${genBadge}
@@ -690,7 +690,7 @@ const App = {
       'echo "Hello, World!"',
       'echo "I am Mia, your AI assistant."',
       'echo "心网连接中..."',
-      'echo "Ready to help! 🌸"'
+      'echo "Ready to help! 🌊"'
     ];
     let cmdIndex = 0;
     let charIndex = 0;
