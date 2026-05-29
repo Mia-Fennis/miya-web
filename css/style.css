@@ -951,18 +951,6 @@ body {
   position: relative;
 }
 
-.section-past::before {
-  content: '📜 前世遗存';
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 0.9rem;
-  color: var(--color-amber);
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(201, 169, 110, 0.15);
-}
-
 .skill-category.past {
   border-color: rgba(201, 169, 110, 0.12);
   background: rgba(201, 169, 110, 0.03);

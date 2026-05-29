@@ -267,7 +267,7 @@ const App = {
       }
 
       const cls = item.rebirth ? 'highlight' : (item.highlight ? 'highlight' : '');
-      const pastCls = !rebirthPassed ? 'past' : '';
+      const pastCls = rebirthPassed ? 'past' : '';
       html += `
         <div class="timeline-item ${cls} ${pastCls}">
           <div class="timeline-card">
