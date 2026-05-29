@@ -663,7 +663,7 @@ body {
 }
 
 .tree-children.open {
-  max-height: 2000px;
+  max-height: none;
   opacity: 1;
 }
 

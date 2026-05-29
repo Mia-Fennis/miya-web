@@ -448,7 +448,7 @@ const App = {
               <div class="tree-dir-header" data-dir="root">
                 <span class="tree-toggle expanded">▶</span>
                 <span class="tree-dir-icon">📚</span>
-                <span class="tree-dir-name" style="color:var(--color-primary)">${data.root}</span>
+                <span class="tree-dir-name" style="color:var(--color-primary)">${displayName(data.root)}</span>
                 <span class="tree-dir-count">${data.stats.totalFiles} 篇</span>
               </div>
               <div class="tree-children open">
