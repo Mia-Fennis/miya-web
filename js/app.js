@@ -366,7 +366,7 @@ const App = {
     container.innerHTML = '<p class="knowledge-loading">加载中...</p>';
 
     try {
-      const res = await fetch('data/knowledge.json?v=1');
+      const res = await fetch('data/knowledge.json?v=2');
       if (!res.ok) throw new Error('Failed to load');
       const data = await res.json();
 
