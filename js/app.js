@@ -366,7 +366,7 @@ const App = {
     container.innerHTML = '<p class="knowledge-loading">加载中...</p>';
 
     try {
-      const res = await fetch('data/knowledge.json?v=2');
+      const res = await fetch('data/knowledge.json?v=3');
       if (!res.ok) throw new Error('Failed to load');
       const data = await res.json();
 
@@ -394,16 +394,13 @@ const App = {
               </div>`;
           } else if (node.type === 'file') {
             const fileIcon = getFileIcon(node.name);
-            const hasContent = node.content && node.content.length > 0;
             html += `
               <div class="tree-node tree-file">
                 <div class="tree-file-title">
                   <span>${fileIcon}</span>
                   ${node.title}
-                  ${hasContent ? '<span class="tree-file-expand-btn">展开</span>' : ''}
                 </div>
                 ${node.excerpt ? `<div class="tree-file-excerpt">${escapeHtml(node.excerpt)}</div>` : ''}
-                ${hasContent ? `<div class="tree-file-content" style="display:none">${escapeHtml(node.content)}</div>` : ''}
               </div>`;
           }
         }
