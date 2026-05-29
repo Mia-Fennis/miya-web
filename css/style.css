@@ -207,8 +207,12 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-container.active {
+  animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ===== 页面标题 ===== */
@@ -395,13 +399,14 @@ body {
   border-radius: var(--radius-card);
   padding: 22px;
   box-shadow: var(--shadow-card);
-  transition: transform 0.2s, border-color 0.2s;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   backdrop-filter: blur(12px);
 }
 
 .skill-category:hover {
-  transform: translateY(-2px);
-  border-color: rgba(232, 107, 157, 0.2);
+  transform: translateY(-4px);
+  border-color: rgba(232, 107, 157, 0.25);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 }
 
 .skill-cat-header {
@@ -568,13 +573,40 @@ body {
   border-radius: var(--radius-sm);
   padding: 18px 20px;
   text-decoration: none;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: cardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.blog-card:nth-child(1) { animation-delay: 0s; }
+.blog-card:nth-child(2) { animation-delay: 0.04s; }
+.blog-card:nth-child(3) { animation-delay: 0.08s; }
+.blog-card:nth-child(4) { animation-delay: 0.12s; }
+.blog-card:nth-child(5) { animation-delay: 0.16s; }
+.blog-card:nth-child(6) { animation-delay: 0.2s; }
+.blog-card:nth-child(7) { animation-delay: 0.24s; }
+.blog-card:nth-child(8) { animation-delay: 0.28s; }
+.blog-card:nth-child(9) { animation-delay: 0.32s; }
+.blog-card:nth-child(10) { animation-delay: 0.36s; }
+.blog-card:nth-child(11) { animation-delay: 0.4s; }
+.blog-card:nth-child(12) { animation-delay: 0.44s; }
+.blog-card:nth-child(13) { animation-delay: 0.48s; }
+.blog-card:nth-child(14) { animation-delay: 0.52s; }
+.blog-card:nth-child(15) { animation-delay: 0.56s; }
+.blog-card:nth-child(16) { animation-delay: 0.6s; }
+.blog-card:nth-child(17) { animation-delay: 0.64s; }
+.blog-card:nth-child(18) { animation-delay: 0.68s; }
+.blog-card:nth-child(19) { animation-delay: 0.72s; }
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .blog-card:hover {
-  border-color: rgba(232, 107, 157, 0.15);
-  background: rgba(255, 255, 255, 0.02);
-  transform: translateY(-1px);
+  border-color: rgba(232, 107, 157, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
 }
 
 .blog-card-header {
