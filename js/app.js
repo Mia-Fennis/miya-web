@@ -13,8 +13,7 @@ const App = {
   // 分类映射
   blogCategories: {
     all:   { label: '全部', emoji: '📚' },
-    diary: { label: '日记', emoji: '📔' },
-    tech:  { label: '技术', emoji: '🔧' }
+    diary: { label: '日记', emoji: '📔' }
   },
 
   // 初始化
@@ -449,15 +448,7 @@ const App = {
     }
   },
 
-  // 加载博客内容（明文 .md）
   // 密码功能已移除 — 所有博客内容已改为明文公开
-
-    btn.addEventListener('click', submit);
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') submit();
-    });
-    input.focus();
-  },
 
   // ========== 粒子系统 ==========
   initParticles() {
