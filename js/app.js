@@ -31,8 +31,9 @@ const App = {
   async init() {
     this.bindNav();
     await this.loadData(); // 等待数据加载完成后再路由
-    this.initParticles();
+    this.initStarfield();
     this.initTypewriter();
+    this.initScrollReveal();
 
     // 监听 hash 变化
     window.addEventListener('hashchange', () => this.route());
@@ -547,73 +548,155 @@ const App = {
 
   // 密码功能已移除 — 所有博客内容已改为明文公开
 
-  // ========== 粒子系统 ==========
-  initParticles() {
-    const canvas = document.getElementById('particles');
+  // ========== 星空粒子引擎 ==========
+  initStarfield() {
+    const canvas = document.getElementById('starfield');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
+    let W, H;
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
     };
     resize();
     window.addEventListener('resize', resize);
 
-    const particles = [];
-    const count = 80;
+    // 鼠标追踪
+    let mouseX = -9999, mouseY = -9999;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
 
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
-        this.opacity = Math.random() * 0.5 + 0.2;
-        this.color = Math.random() > 0.5 ? '255, 107, 157' : '168, 216, 234';
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
-        ctx.fill();
-      }
+    // 生成星辰
+    const stars = [];
+    const STAR_COUNT = 350;
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const colorRand = Math.random();
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        size: Math.random() * 2.5 + 0.3,
+        baseOpacity: Math.random() * 0.5 + 0.2,
+        twinklePhase: Math.random() * Math.PI * 2,
+        twinkleSpeed: Math.random() * 0.025 + 0.005,
+        hue: colorRand > 0.85 ? '45,212,191'    // 海青
+           : colorRand > 0.7  ? '168,192,255'    // 淡蓝
+           :                     '255,255,255'    // 白
+      });
     }
 
-    for (let i = 0; i < count; i++) particles.push(new Particle());
+    // 流星系统
+    let shootingStars = [];
+    let nextStarTimer = Math.random() * 10000 + 8000;
 
-    function drawLines() {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(255, 107, 157, ${0.1 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
+    function spawnShootingStar() {
+      const angle = -Math.PI / 4 + (Math.random() - 0.5) * 0.6;
+      const speed = Math.random() * 5 + 4;
+      return {
+        x: Math.random() * W * 0.8 + W * 0.1,
+        y: Math.random() * H * 0.25,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 1,
+        decay: Math.random() * 0.018 + 0.012,
+        trail: []
+      };
+    }
+
+    let lastTime = 0;
+    function animate(time) {
+      const dt = lastTime ? Math.min(time - lastTime, 50) : 16;
+      lastTime = time;
+
+      ctx.clearRect(0, 0, W, H);
+
+      // 绘制星辰
+      for (const star of stars) {
+        const twinkle = Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.3 + 0.7;
+
+        // 鼠标经过时变亮
+        const dx = mouseX - star.x;
+        const dy = mouseY - star.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const mouseGlow = Math.max(0, 1 - dist / 180) * 0.6;
+
+        const opacity = Math.min(star.baseOpacity * twinkle + mouseGlow, 1);
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${star.hue}, ${opacity})`;
+        ctx.fill();
+
+        // 较亮星星的光晕
+        if (star.size > 1.5 && opacity > 0.5) {
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.size * 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${star.hue}, ${opacity * 0.08})`;
+          ctx.fill();
         }
       }
-    }
 
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => { p.update(); p.draw(); });
-      drawLines();
+      // 流星刷出
+      nextStarTimer -= dt;
+      if (nextStarTimer <= 0) {
+        shootingStars.push(spawnShootingStar());
+        nextStarTimer = Math.random() * 14000 + 6000;
+      }
+
+      // 更新&绘制流星
+      shootingStars = shootingStars.filter(ss => ss.life > 0);
+
+      for (const ss of shootingStars) {
+        ss.trail.push({ x: ss.x, y: ss.y, age: 0 });
+        ss.x += ss.vx;
+        ss.y += ss.vy;
+        ss.life -= ss.decay;
+
+        // 拖尾
+        for (let i = ss.trail.length - 1; i >= 0; i--) {
+          const t = ss.trail[i];
+          t.age += 0.04;
+          if (t.age > 1) { ss.trail.splice(i, 1); continue; }
+          const alpha = (1 - t.age) * 0.5;
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, 1.8 * (1 - t.age), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(45, 212, 191, ${alpha})`;
+          ctx.fill();
+        }
+
+        // 流星头
+        if (ss.life > 0) {
+          ctx.beginPath();
+          ctx.arc(ss.x, ss.y, 2.8, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${ss.life * 0.9})`;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(ss.x, ss.y, 6, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(45, 212, 191, ${ss.life * 0.08})`;
+          ctx.fill();
+        }
+      }
+
       requestAnimationFrame(animate);
     }
-    animate();
+    requestAnimationFrame(animate);
+  },
+
+  // ========== 滚动揭示动画 ==========
+  initScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   },
 
   // ========== 打字机效果 ==========
