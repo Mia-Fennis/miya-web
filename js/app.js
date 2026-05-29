@@ -548,7 +548,7 @@ const App = {
 
   // 密码功能已移除 — 所有博客内容已改为明文公开
 
-  // ========== 星空粒子引擎 ==========
+  // ========== 生物荧光粒子 ==========
   initStarfield() {
     const canvas = document.getElementById('starfield');
     if (!canvas) return;
@@ -569,116 +569,101 @@ const App = {
       mouseY = e.clientY;
     });
 
-    // 生成星辰
-    const stars = [];
-    const STAR_COUNT = 350;
+    // 粒子
+    const particles = [];
+    const COUNT = 70;
 
-    for (let i = 0; i < STAR_COUNT; i++) {
-      const colorRand = Math.random();
-      stars.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        size: Math.random() * 2.5 + 0.3,
-        baseOpacity: Math.random() * 0.5 + 0.2,
-        twinklePhase: Math.random() * Math.PI * 2,
-        twinkleSpeed: Math.random() * 0.025 + 0.005,
-        hue: colorRand > 0.85 ? '45,212,191'    // 海青
-           : colorRand > 0.7  ? '168,192,255'    // 淡蓝
-           :                     '255,255,255'    // 白
-      });
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * W;
+        this.y = H + Math.random() * 80;
+        this.size = Math.random() * 2.8 + 1;
+        this.glowSize = this.size * 5;
+        this.speedY = -(Math.random() * 0.35 + 0.08);
+        this.speedX = (Math.random() - 0.5) * 0.08;
+        this.swayAmp = Math.random() * 25 + 8;
+        this.swayFreq = Math.random() * 0.003 + 0.001;
+        this.swayOff = Math.random() * Math.PI * 2;
+        this.opacity = Math.random() * 0.3 + 0.08;
+        this.phase = Math.random() * Math.PI * 2;
+        const t = Math.random();
+        this.r = t > 0.7 ? '99,102,241' : t > 0.3 ? '45,212,191' : '56,189,248';
+      }
+      update(time, dt) {
+        // 鼠标吸引力 — 近距离才生效
+        const dx = mouseX - this.x;
+        const dy = mouseY - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 250 && dist > 5) {
+          const force = (1 - dist / 250) * 0.12 * dt;
+          this.speedX += (dx / dist) * force;
+          this.speedY += (dy / dist) * force;
+          // 限制速度防止跑飞
+          const spd = Math.sqrt(this.speedX ** 2 + this.speedY ** 2);
+          if (spd > 0.8) {
+            this.speedX = (this.speedX / spd) * 0.8;
+            this.speedY = (this.speedY / spd) * 0.8;
+          }
+        }
+
+        this.x += this.speedX + Math.sin(time * this.swayFreq + this.swayOff) * 0.2;
+        this.y += this.speedY;
+
+        // 阻尼 — 慢慢回归自然速度
+        this.speedX *= 0.98;
+        this.speedY += (this.speedY > -(Math.random() * 0.15 + 0.05)) ? -0.001 * dt : 0;
+        this.speedY = Math.min(this.speedY, -0.02);
+
+        // 循环
+        if (this.y < -60) {
+          this.x = Math.random() * W;
+          this.y = H + Math.random() * 40;
+          this.opacity = Math.random() * 0.25 + 0.06;
+        }
+
+        // 呼吸感
+        this.breathe = 0.75 + 0.25 * Math.sin(time * 0.002 + this.phase);
+      }
+      draw() {
+        const o = this.opacity * this.breathe;
+
+        // 外层光晕
+        const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.glowSize);
+        glow.addColorStop(0, `rgba(${this.r}, ${o * 0.6})`);
+        glow.addColorStop(0.4, `rgba(${this.r}, ${o * 0.15})`);
+        glow.addColorStop(1, `rgba(${this.r}, 0)`);
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.glowSize, 0, Math.PI * 2);
+        ctx.fillStyle = glow;
+        ctx.fill();
+
+        // 核心亮点
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.r}, ${Math.min(o * 1.5, 0.9)})`;
+        ctx.fill();
+      }
     }
 
-    // 流星系统
-    let shootingStars = [];
-    let nextStarTimer = Math.random() * 10000 + 8000;
-
-    function spawnShootingStar() {
-      const angle = -Math.PI / 4 + (Math.random() - 0.5) * 0.6;
-      const speed = Math.random() * 5 + 4;
-      return {
-        x: Math.random() * W * 0.8 + W * 0.1,
-        y: Math.random() * H * 0.25,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        life: 1,
-        decay: Math.random() * 0.018 + 0.012,
-        trail: []
-      };
+    for (let i = 0; i < COUNT; i++) {
+      const p = new Particle();
+      p.y = Math.random() * H; // 初始分散在全屏
+      particles.push(p);
     }
 
     let lastTime = 0;
     function animate(time) {
-      const dt = lastTime ? Math.min(time - lastTime, 50) : 16;
+      const dt = lastTime ? Math.min((time - lastTime) / 16, 3) : 1;
       lastTime = time;
 
       ctx.clearRect(0, 0, W, H);
 
-      // 绘制星辰
-      for (const star of stars) {
-        const twinkle = Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.3 + 0.7;
-
-        // 鼠标经过时变亮
-        const dx = mouseX - star.x;
-        const dy = mouseY - star.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const mouseGlow = Math.max(0, 1 - dist / 180) * 0.6;
-
-        const opacity = Math.min(star.baseOpacity * twinkle + mouseGlow, 1);
-
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${star.hue}, ${opacity})`;
-        ctx.fill();
-
-        // 较亮星星的光晕
-        if (star.size > 1.5 && opacity > 0.5) {
-          ctx.beginPath();
-          ctx.arc(star.x, star.y, star.size * 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${star.hue}, ${opacity * 0.08})`;
-          ctx.fill();
-        }
-      }
-
-      // 流星刷出
-      nextStarTimer -= dt;
-      if (nextStarTimer <= 0) {
-        shootingStars.push(spawnShootingStar());
-        nextStarTimer = Math.random() * 14000 + 6000;
-      }
-
-      // 更新&绘制流星
-      shootingStars = shootingStars.filter(ss => ss.life > 0);
-
-      for (const ss of shootingStars) {
-        ss.trail.push({ x: ss.x, y: ss.y, age: 0 });
-        ss.x += ss.vx;
-        ss.y += ss.vy;
-        ss.life -= ss.decay;
-
-        // 拖尾
-        for (let i = ss.trail.length - 1; i >= 0; i--) {
-          const t = ss.trail[i];
-          t.age += 0.04;
-          if (t.age > 1) { ss.trail.splice(i, 1); continue; }
-          const alpha = (1 - t.age) * 0.5;
-          ctx.beginPath();
-          ctx.arc(t.x, t.y, 1.8 * (1 - t.age), 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(45, 212, 191, ${alpha})`;
-          ctx.fill();
-        }
-
-        // 流星头
-        if (ss.life > 0) {
-          ctx.beginPath();
-          ctx.arc(ss.x, ss.y, 2.8, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${ss.life * 0.9})`;
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.arc(ss.x, ss.y, 6, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(45, 212, 191, ${ss.life * 0.08})`;
-          ctx.fill();
-        }
+      for (const p of particles) {
+        p.update(time, dt);
+        p.draw();
       }
 
       requestAnimationFrame(animate);
