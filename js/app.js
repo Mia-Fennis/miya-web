@@ -394,13 +394,16 @@ const App = {
               </div>`;
           } else if (node.type === 'file') {
             const fileIcon = getFileIcon(node.name);
+            const hasContent = node.content && node.content.length > 0;
             html += `
               <div class="tree-node tree-file">
                 <div class="tree-file-title">
                   <span>${fileIcon}</span>
                   ${node.title}
+                  ${hasContent ? '<span class="tree-file-expand-btn">展开</span>' : ''}
                 </div>
                 ${node.excerpt ? `<div class="tree-file-excerpt">${escapeHtml(node.excerpt)}</div>` : ''}
+                ${hasContent ? `<div class="tree-file-content" style="display:none">${escapeHtml(node.content)}</div>` : ''}
               </div>`;
           }
         }
@@ -475,6 +478,35 @@ const App = {
           if (children) {
             children.classList.toggle('open');
             toggle.classList.toggle('expanded');
+          }
+        });
+      });
+
+      // 绑定全文展开/收起
+      container.querySelectorAll('.tree-file-expand-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const fileNode = this.closest('.tree-file');
+          const contentDiv = fileNode.querySelector('.tree-file-content');
+          if (!contentDiv) return;
+
+          if (contentDiv.classList.contains('show')) {
+            contentDiv.classList.remove('show');
+            this.textContent = '展开';
+          } else {
+            // 首次展开：用 Markdown 渲染
+            if (!contentDiv.dataset.rendered) {
+              const rawMd = contentDiv.textContent;
+              if (typeof Markdown !== 'undefined' && Markdown.parse) {
+                contentDiv.innerHTML = Markdown.parse(rawMd);
+              } else {
+                // fallback: 基本 markdown 转义
+                contentDiv.innerHTML = rawMd.replace(/\n/g, '<br>');
+              }
+              contentDiv.dataset.rendered = '1';
+            }
+            contentDiv.classList.add('show');
+            this.textContent = '收起';
           }
         });
       });
