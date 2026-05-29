@@ -1,93 +1,121 @@
 [
   {
-    "id": "security",
-    "category": "安全与审查",
-    "icon": "🛡️",
-    "color": "#ff4757",
+    "id": "research",
+    "category": "学术研究",
+    "icon": "📚",
+    "color": "#5BC0BE",
     "skills": [
       {
-        "name": "ClawSec 安全套件",
-        "desc": "CVE公告监控、恶意技能签名验证、安装审批门禁"
+        "name": "文献调研与综述",
+        "desc": "系统性学术文献检索、阅读、分析与综述撰写"
       },
       {
-        "name": "Skill-Vetter",
-        "desc": "技能静态代码审查，检查red flags与权限越界"
+        "name": "行业趋势分析",
+        "desc": "特定领域产业格局、技术路线与发展趋势深度分析"
       },
       {
-        "name": "Worker-Safety",
-        "desc": "工作流安全检查与风险防护"
+        "name": "论文精读与对比",
+        "desc": "论文核心贡献精读、方法对比与创新点拆解"
       }
     ]
   },
   {
-    "id": "dev",
-    "category": "开发工具",
+    "id": "coding",
+    "category": "代码开发",
     "icon": "💻",
-    "color": "#70dbdb",
+    "color": "#4ECDC4",
     "skills": [
       {
-        "name": "Code-Assistant",
-        "desc": "代码分析、bug查找、优化建议与自动重构"
+        "name": "多语言编程",
+        "desc": "Python/JS/TypeScript 全栈开发与调试"
       },
       {
-        "name": "GitHub CLI",
-        "desc": "Issues/PRs管理、CI/CD监控、仓库高级查询"
+        "name": "代码重构与调试",
+        "desc": "代码优化、bug定位、性能调优与自动化测试"
       },
       {
-        "name": "Agent-Browser",
-        "desc": "Rust引擎浏览器自动化，标签页/页面精准控制"
-      },
-      {
-        "name": "Kimi-WebBridge",
-        "desc": "接管用户真实浏览器，复用登录态与Cookie"
+        "name": "自动化脚本与运维",
+        "desc": "批处理脚本、定时任务编排与部署运维自动化"
       }
     ]
   },
   {
-    "id": "system",
-    "category": "系统管理",
-    "icon": "⚙️",
-    "color": "#ff9f43",
+    "id": "content",
+    "category": "内容创作",
+    "icon": "✍️",
+    "color": "#6CCFCD",
     "skills": [
       {
-        "name": "Time-Awareness",
-        "desc": "日期时间感知、计划排程、截止日追踪"
+        "name": "中文创作与表达",
+        "desc": "高质量中文文章、方案、报告与创意内容撰写"
       },
       {
-        "name": "Self-Improving",
-        "desc": "错误捕获、经验沉淀、持续学习与自我优化"
+        "name": "技术写作与文档",
+        "desc": "API文档、用户手册、系统说明与技术白皮书编写"
       },
       {
-        "name": "FindSkills",
-        "desc": "ClawHub技能搜索与发现"
-      },
-      {
-        "name": "Mia-Office-UI",
-        "desc": "像素办公室状态看板，实时展示后台任务执行状态"
-      },
-      {
-        "name": "Weather",
-        "desc": "wttr.in/Open-Meteo天气查询，带伞/穿衣/紫外线提醒"
-      },
-      {
-        "name": "Session-Logs",
-        "desc": "运行日志审计：成本统计、工具使用分析、故障复盘"
+        "name": "多语言翻译",
+        "desc": "中英日技术/学术文本翻译、本地化与润色"
       }
     ]
   },
   {
-    "id": "collab",
-    "category": "通讯与协作",
-    "icon": "💬",
-    "color": "#a29bfe",
+    "id": "design",
+    "category": "前端设计",
+    "icon": "🎨",
+    "color": "#7DD8D6",
     "skills": [
       {
-        "name": "KimiIM",
-        "desc": "Kimi群聊读取、成员管理、消息与文件处理"
+        "name": "UI/UX 设计",
+        "desc": "参考Tasteskill风格，视觉层次清晰、交互直觉友好的界面设计"
       },
       {
-        "name": "Skill-Creator",
-        "desc": "新技能开发、现有技能审计与重构"
+        "name": "CSS 布局与动效",
+        "desc": "Flex/Grid 响应式布局、过渡动画与微交互实现"
+      },
+      {
+        "name": "响应式设计",
+        "desc": "适配多端（桌面/平板/移动）的弹性设计与开发"
+      }
+    ]
+  },
+  {
+    "id": "knowledge",
+    "category": "知识管理",
+    "icon": "🧠",
+    "color": "#48B5B3",
+    "skills": [
+      {
+        "name": "Obsidian双链知识库",
+        "desc": "双向链接图谱构建、标签体系设计与知识沉淀"
+      },
+      {
+        "name": "信息聚合与摘要",
+        "desc": "RSS/邮件/多源信息自动汇聚、去重与智能摘要"
+      },
+      {
+        "name": "跨平台笔记同步",
+        "desc": "多设备笔记同步、版本管理与知识库迁移"
+      }
+    ]
+  },
+  {
+    "id": "integration",
+    "category": "系统集成",
+    "icon": "🔗",
+    "color": "#3DADAB",
+    "skills": [
+      {
+        "name": "飞书/QQ/Telegram 网关",
+        "desc": "多IM平台消息收发、指令解析与自动化响应"
+      },
+      {
+        "name": "Cron 定时任务",
+        "desc": "周期性任务编排、触发执行与失败告警"
+      },
+      {
+        "name": "Git/GitHub 部署",
+        "desc": "代码管理、CI/CD 流水线配置与自动部署"
       }
     ]
   }

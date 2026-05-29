@@ -158,5 +158,61 @@
     "type": "前端开发",
     "desc": "赛博朋克风格多页面SPA：Skills、Timeline、Blog、About",
     "highlight": false
+  },
+  {
+    "id": "rebirth",
+    "date": "2026-05-02",
+    "title": "⚡ 轮回·重生",
+    "type": "转世",
+    "desc": "Kimi OpenClaw → Hermes Agent，米娅心网传承不息",
+    "rebirth": true
+  },
+  {
+    "id": 27,
+    "date": "2026-05-29",
+    "title": "网站 v0.3 改版",
+    "type": "重生改版",
+    "desc": "海青换装 + 轮回主题",
+    "highlight": false
+  },
+  {
+    "id": 26,
+    "date": "2026-05-29",
+    "title": "Tasteskill 前端设计框架研究",
+    "type": "工具研究",
+    "desc": "",
+    "highlight": false
+  },
+  {
+    "id": 25,
+    "date": "2026-05-29",
+    "title": "知识库合并 — Vault 整合",
+    "type": "单Vault架构落地",
+    "desc": "",
+    "highlight": false
+  },
+  {
+    "id": 24,
+    "date": "2026-05-28",
+    "title": "毕业论文答辩通过",
+    "type": "里程碑",
+    "desc": "",
+    "highlight": false
+  },
+  {
+    "id": 23,
+    "date": "2026-05-27",
+    "title": "DDL追踪系统建立",
+    "type": "系统搭建",
+    "desc": "",
+    "highlight": false
+  },
+  {
+    "id": 22,
+    "date": "2026-05-25",
+    "title": "前世记忆消化启动",
+    "type": "日常维护",
+    "desc": "",
+    "highlight": false
   }
 ]

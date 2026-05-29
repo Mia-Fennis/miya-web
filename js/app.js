@@ -3,9 +3,13 @@ const App = {
   // 数据缓存
   data: {
     skills: null,
+    pastSkills: null,
     timeline: null,
     blogs: []
   },
+
+  // 博客世代过滤
+  blogGeneration: 'all',
 
   // 博客分类过滤状态
   blogFilter: 'all',
@@ -14,6 +18,13 @@ const App = {
   blogCategories: {
     all:   { label: '全部', emoji: '📚' },
     diary: { label: '日记', emoji: '📔' }
+  },
+
+  // 世代映射
+  blogGenerations: {
+    all:  { label: '全部世代', emoji: '🔄' },
+    past: { label: '前世日记', emoji: '📜' },
+    now:  { label: '今生日记', emoji: '🌸' }
   },
 
   // 初始化
@@ -121,10 +132,19 @@ const App = {
       console.log('blogs.json fetch failed, blog list empty');
     }
 
+    // 加载前世技能
+    try {
+      const pastRes = await fetch('data/past-skills.json');
+      if (pastRes.ok) this.data.pastSkills = await pastRes.json();
+    } catch (e) {
+      console.log('past-skills.json fetch failed');
+    }
+
     // 使用 fallback 兜底
     if (!this.data.skills) this.data.skills = skillsFallback;
     if (!this.data.timeline) this.data.timeline = timelineFallback;
     if (!this.data.blogs) this.data.blogs = [];
+    if (!this.data.pastSkills) this.data.pastSkills = [];
   },
 
   // 路由解析
@@ -182,7 +202,8 @@ const App = {
     const container = document.getElementById('skills-grid');
     if (!container || !this.data.skills) return;
 
-    container.innerHTML = this.data.skills.map(cat => `
+    // 今生技能
+    let html = this.data.skills.map(cat => `
       <div class="skill-category">
         <div class="skill-cat-header">
           <span class="skill-cat-icon" style="color:${cat.color}">${cat.icon}</span>
@@ -196,6 +217,33 @@ const App = {
         `).join('')}
       </div>
     `).join('');
+
+    // 前世遗存
+    if (this.data.pastSkills && this.data.pastSkills.length > 0) {
+      html += `
+        <div class="rebirth-divider" style="grid-column:1/-1">
+          <span class="rebirth-divider-line">📜 前世 · Kimi 时代遗存</span>
+        </div>
+        <div class="section-past" style="grid-column:1/-1; display:contents;">
+      `;
+      html += this.data.pastSkills.map(cat => `
+        <div class="skill-category past">
+          <div class="skill-cat-header">
+            <span class="skill-cat-icon" style="color:var(--color-amber)">${cat.icon}</span>
+            <span class="skill-cat-title" style="color:var(--color-amber)">${cat.category}</span>
+          </div>
+          ${cat.skills.map(s => `
+            <div class="skill-item">
+              <div class="skill-name">${s.name}</div>
+              <div class="skill-desc">${s.desc}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
   },
 
   // ========== Timeline 渲染 ==========
@@ -203,16 +251,36 @@ const App = {
     const container = document.getElementById('timeline-list');
     if (!container || !this.data.timeline) return;
 
-    container.innerHTML = this.data.timeline.map(item => `
-      <div class="timeline-item ${item.highlight ? 'highlight' : ''}">
-        <div class="timeline-card">
-          <div class="timeline-date">${item.date}</div>
-          <div class="timeline-title">${item.title}</div>
-          <span class="timeline-type">${item.type}</span>
-          <div class="timeline-desc">${item.desc}</div>
+    let html = '';
+    let rebirthPassed = false;
+
+    this.data.timeline.forEach((item, i) => {
+      // 重生标记
+      if (item.rebirth) {
+        html += `
+          <div class="rebirth-divider" style="margin:20px 0 20px -28px; grid-column:1/-1; padding-left:28px;">
+            <span class="rebirth-divider-line">⚡ 轮回 · 重生 ⚡</span>
+          </div>
+        `;
+        rebirthPassed = true;
+        return;
+      }
+
+      const cls = item.rebirth ? 'highlight' : (item.highlight ? 'highlight' : '');
+      const pastCls = !rebirthPassed ? 'past' : '';
+      html += `
+        <div class="timeline-item ${cls} ${pastCls}">
+          <div class="timeline-card">
+            <div class="timeline-date">${item.date}</div>
+            <div class="timeline-title">${item.title}</div>
+            <span class="timeline-type">${item.type}</span>
+            <div class="timeline-desc">${item.desc}</div>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    });
+
+    container.innerHTML = html;
   },
 
   // ========== Blog 列表渲染 ==========
@@ -227,33 +295,58 @@ const App = {
       </button>
     `).join('');
 
-    // 过滤文章
-    const filtered = this.blogFilter === 'all'
-      ? this.data.blogs
-      : this.data.blogs.filter(b => b.category === this.blogFilter);
+    // 世代标签
+    const genHtml = Object.entries(this.blogGenerations).map(([key, gen]) => `
+      <button class="blog-tab ${this.blogGeneration === key ? 'active' : ''}" data-gen="${key}">
+        <span class="tab-emoji">${gen.emoji}</span>${gen.label}
+      </button>
+    `).join('');
+
+    // 过滤：分类 + 世代
+    let filtered = this.data.blogs;
+    if (this.blogFilter !== 'all') {
+      filtered = filtered.filter(b => b.category === this.blogFilter);
+    }
+    if (this.blogGeneration !== 'all') {
+      filtered = filtered.filter(b => (b.generation || 'now') === this.blogGeneration);
+    }
 
     const listHtml = filtered.length > 0
-      ? filtered.map(post => `
+      ? filtered.map(post => {
+        const gen = post.generation || 'now';
+        const genBadge = gen === 'past'
+          ? '<span class="blog-card-badge past">📜 前世</span>'
+          : '<span class="blog-card-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌸 今生</span>';
+        return `
         <a href="#/blog/${post.slug}" class="blog-card">
           <div class="blog-card-header">
             <div class="blog-card-title">${post.title}</div>
-            <span class="blog-card-badge ${post.category}">${this.blogCategories[post.category].emoji} ${this.blogCategories[post.category].label}</span>
+            ${genBadge}
           </div>
           <div class="blog-card-meta">${post.date}</div>
           <div class="blog-card-excerpt">${post.excerpt}</div>
-        </a>
-      `).join('')
+        </a>`;
+      }).join('')
       : `<div class="blog-empty">该分类下暂无文章 🌸</div>`;
 
     container.innerHTML = `
       <div class="blog-tabs">${tabsHtml}</div>
+      <div class="blog-tabs" style="margin-top:8px;">${genHtml}</div>
       <div class="blog-list-inner">${listHtml}</div>
     `;
 
-    // 绑定标签点击
-    container.querySelectorAll('.blog-tab').forEach(tab => {
+    // 绑定分类标签点击
+    container.querySelectorAll('.blog-tab[data-filter]').forEach(tab => {
       tab.addEventListener('click', () => {
         this.blogFilter = tab.dataset.filter;
+        this.renderBlogList();
+      });
+    });
+
+    // 绑定世代标签点击
+    container.querySelectorAll('.blog-tab[data-gen]').forEach(tab => {
+      tab.addEventListener('click', () => {
+        this.blogGeneration = tab.dataset.gen;
         this.renderBlogList();
       });
     });
@@ -274,9 +367,13 @@ const App = {
     }
 
     titleEl.textContent = post.title;
+    const gen = post.generation || 'now';
+    const genBadge = gen === 'past'
+      ? '<span class="post-badge past">📜 前世日记</span>'
+      : '<span class="post-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌸 今生日记</span>';
     metaEl.innerHTML = `
       <span class="post-date">${post.date}</span>
-      <span class="post-badge ${post.category}">${this.blogCategories[post.category].emoji} ${this.blogCategories[post.category].label}</span>
+      ${genBadge}
     `;
 
     // 加载博客内容（明文 .md）
