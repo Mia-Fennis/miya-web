@@ -224,7 +224,7 @@ const App = {
         <div class="rebirth-divider" style="grid-column:1/-1">
           <span class="rebirth-divider-line">📜 前世 · Kimi 时代遗存</span>
         </div>
-        <div class="section-past" style="grid-column:1/-1; display:contents;">
+        <div class="section-past" style="grid-column:1/-1; display:grid; grid-template-columns:subgrid; gap:18px;">
       `;
       html += this.data.pastSkills.map(cat => `
         <div class="skill-category past">
