@@ -184,6 +184,10 @@ const App = {
           this.renderBlogList();
         }
         break;
+      case 'knowledge':
+        this.showPage('knowledge');
+        this.renderKnowledge();
+        break;
       case 'about':
         this.showPage('about');
         break;
@@ -351,6 +355,140 @@ const App = {
         this.renderBlogList();
       });
     });
+  },
+
+  // ========== 知识库渲染 ==========
+  async renderKnowledge() {
+    const container = document.getElementById('knowledge-container');
+    const subtitle = document.getElementById('knowledge-subtitle');
+    if (!container) return;
+
+    container.innerHTML = '<p class="knowledge-loading">加载中...</p>';
+
+    try {
+      const res = await fetch('data/knowledge.json?v=1');
+      if (!res.ok) throw new Error('Failed to load');
+      const data = await res.json();
+
+      if (subtitle) {
+        subtitle.textContent = `${data.description} · ${data.stats.totalFiles} 篇笔记`;
+      }
+
+      // 递归渲染树
+      function renderTree(nodes, depth = 0) {
+        let html = '';
+        for (const node of nodes) {
+          if (node.type === 'dir') {
+            const icon = getDirIcon(node.name);
+            html += `
+              <div class="tree-node tree-dir">
+                <div class="tree-dir-header" data-dir="${node.name}">
+                  <span class="tree-toggle">▶</span>
+                  <span class="tree-dir-icon">${icon}</span>
+                  <span class="tree-dir-name">${displayName(node.name)}</span>
+                  ${node.fileCount ? `<span class="tree-dir-count">${node.fileCount}</span>` : ''}
+                </div>
+                <div class="tree-children">
+                  ${renderTree(node.children || [], depth + 1)}
+                </div>
+              </div>`;
+          } else if (node.type === 'file') {
+            const fileIcon = getFileIcon(node.name);
+            html += `
+              <div class="tree-node tree-file">
+                <div class="tree-file-title">
+                  <span>${fileIcon}</span>
+                  ${node.title}
+                </div>
+                ${node.excerpt ? `<div class="tree-file-excerpt">${escapeHtml(node.excerpt)}</div>` : ''}
+              </div>`;
+          }
+        }
+        return html;
+      }
+
+      function getDirIcon(name) {
+        if (name.includes('日记')) return '📔';
+        if (name.includes('书籍') || name.includes('庄子')) return '📖';
+        if (name.includes('工具') || name.includes('Agent')) return '🔧';
+        if (name.includes('哲学') || name.includes('三观')) return '💭';
+        if (name.includes('写作') || name.includes('创作')) return '✍️';
+        if (name.includes('文章')) return '📝';
+        if (name.includes('归档')) return '📦';
+        if (name.includes('待读')) return '📗';
+        if (name.includes('内篇')) return '☯';
+        if (name.includes('外篇')) return '☰';
+        if (name.includes('杂篇')) return '⚡';
+        return '📁';
+      }
+
+      function getFileIcon(name) {
+        if (name.includes('米娅笔记')) return '📝';
+        if (name.includes('日记') || name.match(/\d{4}-\d{2}-\d{2}/)) return '📔';
+        if (name.includes('心网')) return '🌊';
+        if (name.includes('说明')) return 'ℹ️';
+        return '📄';
+      }
+
+      function displayName(name) {
+        // 去掉编号前缀，如 "01-文章与随笔" → "文章与随笔"
+        return name.replace(/^\d{2}-/, '');
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      const treeHtml = `
+        <div class="knowledge-tree">
+          <div class="tree-root">
+            <div class="tree-dir">
+              <div class="tree-dir-header" data-dir="root">
+                <span class="tree-toggle expanded">▶</span>
+                <span class="tree-dir-icon">📚</span>
+                <span class="tree-dir-name" style="color:var(--color-primary)">${data.root}</span>
+                <span class="tree-dir-count">${data.stats.totalFiles} 篇</span>
+              </div>
+              <div class="tree-children open">
+                ${renderTree(data.tree)}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="knowledge-stats">
+          <span>📂 ${data.stats.totalDirs} 个目录</span>
+          <span>📄 ${data.stats.totalFiles} 篇笔记</span>
+          <span>🕐 ${data.updatedAt}</span>
+        </div>
+      `;
+
+      container.innerHTML = treeHtml;
+
+      // 绑定展开/折叠事件
+      container.querySelectorAll('.tree-dir-header').forEach(header => {
+        header.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const children = this.nextElementSibling;
+          const toggle = this.querySelector('.tree-toggle');
+          if (children) {
+            children.classList.toggle('open');
+            toggle.classList.toggle('expanded');
+          }
+        });
+      });
+
+      // 默认展开根目录
+      const rootToggle = container.querySelector('.tree-root .tree-toggle');
+      if (rootToggle) rootToggle.classList.add('expanded');
+      const rootChildren = container.querySelector('.tree-root .tree-children');
+      if (rootChildren) rootChildren.classList.add('open');
+
+    } catch (e) {
+      console.error('Knowledge load error:', e);
+      container.innerHTML = '<p class="knowledge-loading" style="color:var(--color-error)">知识库加载失败，请稍后重试 🌊</p>';
+    }
   },
 
   // ========== Blog 单篇渲染 ==========

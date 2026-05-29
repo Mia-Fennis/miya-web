@@ -574,6 +574,189 @@ body {
   transform: translateY(-2px);
 }
 
+/* ===== 知识库树形目录 ===== */
+.knowledge-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.knowledge-loading {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px;
+}
+
+.knowledge-tree {
+  position: relative;
+}
+
+/* 树节点通用 */
+.tree-node {
+  position: relative;
+  user-select: none;
+}
+
+/* 目录节点 */
+.tree-dir {
+  margin: 2px 0;
+}
+
+.tree-dir-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.tree-dir-header:hover {
+  background: rgba(45,212,191,0.04);
+  color: var(--text-primary);
+}
+
+.tree-toggle {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.tree-toggle.expanded {
+  transform: rotate(90deg);
+}
+
+.tree-dir-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.tree-dir-name {
+  flex: 1;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.tree-dir-count {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* 目录子节点容器 */
+.tree-children {
+  position: relative;
+  padding-left: 28px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.25s ease;
+}
+
+.tree-children.open {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+/* 左侧连接线 */
+.tree-children::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(45,212,191,0.08);
+}
+
+/* 文件节点 */
+.tree-file {
+  padding: 8px 10px 8px 14px;
+  margin: 2px 0;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+  cursor: default;
+  position: relative;
+}
+
+.tree-file:hover {
+  background: rgba(255,255,255,0.02);
+  border-left-color: rgba(45,212,191,0.2);
+}
+
+.tree-file-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tree-file-excerpt {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 根目录特殊样式 */
+.tree-root {
+  margin-bottom: 24px;
+}
+
+.tree-root .tree-dir-header {
+  font-size: 1.05rem;
+  color: var(--color-primary);
+  padding: 10px 12px;
+  background: rgba(45,212,191,0.03);
+  border: 1px solid rgba(45,212,191,0.08);
+  border-radius: var(--radius-card);
+}
+
+.tree-root .tree-dir-header:hover {
+  background: rgba(45,212,191,0.06);
+}
+
+.tree-root > .tree-children {
+  padding-left: 20px;
+  margin-top: 8px;
+}
+
+/* 知识库统计 */
+.knowledge-stats {
+  display: flex;
+  gap: 20px;
+  margin-top: 24px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(45,212,191,0.06);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.knowledge-stats span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 /* ===== 通用滚动揭示 ===== */
 .reveal {
   opacity: 0;
