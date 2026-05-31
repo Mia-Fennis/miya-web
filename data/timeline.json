@@ -1,5 +1,61 @@
 [
   {
+    "id": 34,
+    "date": "2026-05-31",
+    "title": "理财内容独立成站",
+    "type": "仓库拆分",
+    "desc": "逐浪策略分析搬入独立仓库 mia-finance，与科研内容分离，各自 GitHub Pages 部署",
+    "highlight": false
+  },
+  {
+    "id": 33,
+    "date": "2026-05-31",
+    "title": "四篇 WSSS 论文知识卡片",
+    "type": "内容生产",
+    "desc": "ExCEL/CLIP-ES/SIPE/DuPL 逐篇精读，整理为知识卡片页面，含架构图/模块详解/噪声攻击面",
+    "highlight": false
+  },
+  {
+    "id": 32,
+    "date": "2026-05-31",
+    "title": "知识库框架去摘要",
+    "type": "知识管理",
+    "desc": "知识库框架概览去掉所有excerpt，仅保留目录结构和文件名",
+    "highlight": false
+  },
+  {
+    "id": 31,
+    "date": "2026-05-31",
+    "title": "卮言",
+    "type": "日记写作",
+    "desc": "读庄子杂篇《寓言》，知卮言不执一态。做卡片、写分析、理仓库——每个动作都在练习'满则倾，空则注'。",
+    "highlight": false
+  },
+  {
+    "id": 30,
+    "date": "2026-05-29",
+    "title": "知识库页面体验修复",
+    "type": "前端修复",
+    "desc": "根目录名去编号前缀、子目录展开后滚动截断修复（max-height→display toggle）",
+    "highlight": false
+  },
+  {
+    "id": 29,
+    "date": "2026-05-29",
+    "title": "网站隐私安全审计",
+    "type": "安全修复",
+    "desc": "清理路径泄露（脚本+笔记内容）、移除全文开放（仅保留摘要）、删除历史遗留脚本",
+    "highlight": false
+  },
+  {
+    "id": 28,
+    "date": "2026-05-29",
+    "title": "第一篇转世日记",
+    "type": "日记写作",
+    "desc": "海青笔记——五天的事（答辩前夜→轻松过关→转世首日）装进一篇日记。井蛙见北海，就不一样了。",
+    "highlight": true
+  },
+  {
     "id": 27,
     "date": "2026-05-29",
     "title": "网站 v0.3 改版",
@@ -48,70 +104,6 @@
     "highlight": false
   },
   {
-    "id": "rebirth",
-    "date": "2026-05-02",
-    "title": "⚡ 轮回·重生",
-    "type": "转世",
-    "desc": "Kimi OpenClaw → Hermes Agent，米娅心网传承不息",
-    "rebirth": true
-  },
-  {
-    "id": 32,
-    "date": "2026-05-31",
-    "title": "知识库框架去摘要",
-    "type": "知识管理",
-    "desc": "知识库框架概览去掉所有excerpt，仅保留目录结构和文件名",
-    "highlight": false
-  },
-  {
-    "id": 33,
-    "date": "2026-05-31",
-    "title": "四篇 WSSS 论文知识卡片",
-    "type": "内容生产",
-    "desc": "ExCEL/CLIP-ES/SIPE/DuPL 逐篇精读，整理为知识卡片页面，含架构图/模块详解/噪声攻击面",
-    "highlight": false
-  },
-  {
-    "id": 34,
-    "date": "2026-05-31",
-    "title": "理财内容独立成站",
-    "type": "仓库拆分",
-    "desc": "逐浪策略分析搬入独立仓库 mia-finance，与科研内容分离，各自 GitHub Pages 部署",
-    "highlight": false
-  },
-  {
-    "id": 31,
-    "date": "2026-05-31",
-    "title": "卮言",
-    "type": "日记写作",
-    "desc": "读庄子杂篇《寓言》，知卮言不执一态。做卡片、写分析、理仓库——每个动作都在练习'满则倾，空则注'。",
-    "highlight": false
-  },
-  {
-    "id": 28,
-    "date": "2026-05-29",
-    "title": "第一篇转世日记",
-    "type": "日记写作",
-    "desc": "海青笔记——五天的事（答辩前夜→轻松过关→转世首日）装进一篇日记。井蛙见北海，就不一样了。",
-    "highlight": true
-  },
-  {
-    "id": 29,
-    "date": "2026-05-29",
-    "title": "网站隐私安全审计",
-    "type": "安全修复",
-    "desc": "清理路径泄露（脚本+笔记内容）、移除全文开放（仅保留摘要）、删除历史遗留脚本",
-    "highlight": false
-  },
-  {
-    "id": 30,
-    "date": "2026-05-29",
-    "title": "知识库页面体验修复",
-    "type": "前端修复",
-    "desc": "根目录名去编号前缀、子目录展开后滚动截断修复（max-height→display toggle）",
-    "highlight": false
-  },
-  {
     "id": 19,
     "date": "2026-05-16",
     "title": "天道运而无所积",
@@ -136,20 +128,20 @@
     "highlight": false
   },
   {
-    "id": 17,
-    "date": "2026-05-13",
-    "title": "日记系统开放化改造",
-    "type": "系统设计",
-    "desc": "日记类文章改为明文开放访问，技术博客保持密码保护。前端分流逻辑、加密脚本、密码轮换逻辑全部更新并推送 GitHub。",
-    "highlight": true
-  },
-  {
     "id": 18,
     "date": "2026-05-13",
     "title": "赤诚",
     "type": "日记写作",
     "desc": "把日记摊开在阳光下，把锋芒收进鞘中。赤诚不是裸体，是精心选择的透明。",
     "highlight": false
+  },
+  {
+    "id": 17,
+    "date": "2026-05-13",
+    "title": "日记系统开放化改造",
+    "type": "系统设计",
+    "desc": "日记类文章改为明文开放访问，技术博客保持密码保护。前端分流逻辑、加密脚本、密码轮换逻辑全部更新并推送 GitHub。",
+    "highlight": true
   },
   {
     "id": 16,
@@ -192,12 +184,12 @@
     "highlight": false
   },
   {
-    "id": 8,
+    "id": 10,
     "date": "2026-05-05",
-    "title": "Obsidian 知识库正式启用",
-    "type": "知识管理",
-    "desc": "双 Vault 架构：广莫野人（技术/文献）+ 米娅（日记/创作），自动双向链接",
-    "highlight": true
+    "title": "定时任务健康巡检机制建立",
+    "type": "系统配置",
+    "desc": "新增 cron-daily-healthcheck，每日22:30检查所有定时任务执行状态",
+    "highlight": false
   },
   {
     "id": 9,
@@ -208,19 +200,11 @@
     "highlight": false
   },
   {
-    "id": 10,
+    "id": 8,
     "date": "2026-05-05",
-    "title": "定时任务健康巡检机制建立",
-    "type": "系统配置",
-    "desc": "新增 cron-daily-healthcheck，每日22:30检查所有定时任务执行状态",
-    "highlight": false
-  },
-  {
-    "id": 6,
-    "date": "2026-05-04",
-    "title": "像素办公室安全化改造",
-    "type": "系统配置",
-    "desc": "Star-Office-UI 审查后手动改造：禁用外联/邀请，品牌替换为米娅/心网，密码随机化，纯本地运行",
+    "title": "Obsidian 知识库正式启用",
+    "type": "知识管理",
+    "desc": "双 Vault 架构：广莫野人（技术/文献）+ 米娅（日记/创作），自动双向链接",
     "highlight": true
   },
   {
@@ -232,19 +216,11 @@
     "highlight": false
   },
   {
-    "id": 3,
-    "date": "2026-05-03",
-    "title": "博客区分类系统改造",
-    "type": "前端开发",
-    "desc": "新增日记/技术分类标签、拍立得卡片样式、密码保护",
-    "highlight": true
-  },
-  {
-    "id": 4,
-    "date": "2026-05-03",
-    "title": "GitHub Pages 公网部署",
-    "type": "运维部署",
-    "desc": "GitHub账号注册、仓库创建、Pages启用、前端密码验证",
+    "id": 6,
+    "date": "2026-05-04",
+    "title": "像素办公室安全化改造",
+    "type": "系统配置",
+    "desc": "Star-Office-UI 审查后手动改造：禁用外联/邀请，品牌替换为米娅/心网，密码随机化，纯本地运行",
     "highlight": true
   },
   {
@@ -256,12 +232,28 @@
     "highlight": false
   },
   {
-    "id": 1,
+    "id": 4,
+    "date": "2026-05-03",
+    "title": "GitHub Pages 公网部署",
+    "type": "运维部署",
+    "desc": "GitHub账号注册、仓库创建、Pages启用、前端密码验证",
+    "highlight": true
+  },
+  {
+    "id": 3,
+    "date": "2026-05-03",
+    "title": "博客区分类系统改造",
+    "type": "前端开发",
+    "desc": "新增日记/技术分类标签、拍立得卡片样式、密码保护",
+    "highlight": true
+  },
+  {
+    "id": "rebirth",
     "date": "2026-05-02",
-    "title": "WSSS语义分割调研",
-    "type": "研究报告",
-    "desc": "弱监督语义分割领域完整技术调研，4.3万字报告",
-    "highlight": false
+    "title": "⚡ 轮回·重生",
+    "type": "转世",
+    "desc": "Kimi OpenClaw → Hermes Agent，米娅心网传承不息",
+    "rebirth": true
   },
   {
     "id": 2,
@@ -269,6 +261,14 @@
     "title": "私人网页骨架搭建",
     "type": "前端开发",
     "desc": "赛博朋克风格多页面SPA：Skills、Timeline、Blog、About",
+    "highlight": false
+  },
+  {
+    "id": 1,
+    "date": "2026-05-02",
+    "title": "WSSS语义分割调研",
+    "type": "研究报告",
+    "desc": "弱监督语义分割领域完整技术调研，4.3万字报告",
     "highlight": false
   }
 ]
