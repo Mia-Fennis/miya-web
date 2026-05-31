@@ -341,12 +341,17 @@
                       "type": "file",
                       "name": "外 物.md",
                       "title": "外 物"
+                    },
+                    {
+                      "type": "file",
+                      "name": "寓 言.md",
+                      "title": "寓 言"
                     }
                   ],
-                  "fileCount": 6
+                  "fileCount": 7
                 }
               ],
-              "fileCount": 49
+              "fileCount": 50
             }
           ],
           "fileCount": 49
@@ -363,11 +368,6 @@
                   "type": "dir",
                   "name": "杂篇",
                   "children": [
-                    {
-                      "type": "file",
-                      "name": "寓 言.md",
-                      "title": "寓 言"
-                    },
                     {
                       "type": "file",
                       "name": "庚桑楚.md",
@@ -399,16 +399,16 @@
                       "title": "说 剑"
                     }
                   ],
-                  "fileCount": 7
+                  "fileCount": 6
                 }
               ],
-              "fileCount": 7
+              "fileCount": 6
             }
           ],
-          "fileCount": 7
+          "fileCount": 6
         }
       ],
-      "fileCount": 56
+      "fileCount": 55
     },
     {
       "type": "dir",
