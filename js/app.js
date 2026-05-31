@@ -323,8 +323,8 @@ const App = {
       </div>
     ` : '';
 
-    // 世代标签（回音分类下隐藏）
-    const genHtml = this.blogFilter !== 'echo' ? Object.entries(this.blogGenerations).map(([key, gen]) => `
+    // 世代标签（回音/博物馆下隐藏）
+    const genHtml = this.blogFilter !== 'echo' && this.blogFilter !== 'museum' ? Object.entries(this.blogGenerations).map(([key, gen]) => `
       <button class="blog-tab ${this.blogGeneration === key ? 'active' : ''}" data-gen="${key}">
         <span class="tab-emoji">${gen.emoji}</span>${gen.label}
       </button>
