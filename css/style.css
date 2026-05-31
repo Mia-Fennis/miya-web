@@ -1143,6 +1143,36 @@ body {
   font-size: 0.9rem;
 }
 
+/* ===== 那尔喀索斯回信导语 ===== */
+.letter-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin: 24px 0 32px;
+  padding: 24px 28px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255,154,182,0.08), rgba(255,154,182,0.02));
+  border: 1px solid rgba(255,154,182,0.15);
+}
+.letter-intro-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.letter-intro-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ff9ab6;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+.letter-intro-body {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
 /* ===== Blog 单篇 ===== */
 .back-btn {
   display: inline-block;

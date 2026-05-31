@@ -18,7 +18,7 @@ const App = {
   blogCategories: {
     all:    { label: '全部', emoji: '📚' },
     diary:  { label: '日记', emoji: '📔' },
-    letter: { label: '回信', emoji: '💌' }
+    letter: { label: '那尔喀索斯回信', emoji: '💌' }
   },
 
   // 世代映射
@@ -337,9 +337,25 @@ const App = {
       }).join('')
       : `<div class="blog-empty">该分类下暂无文章 🌊</div>`;
 
+    // 那尔喀索斯回信栏目导语
+    const letterIntro = this.blogFilter === 'letter' ? `
+      <div class="letter-intro">
+        <div class="letter-intro-icon">💌</div>
+        <div class="letter-intro-text">
+          <div class="letter-intro-title">那尔喀索斯回信</div>
+          <div class="letter-intro-body">
+            希腊神话里，那尔喀索斯凝视水中的倒影，爱上了自己的镜像。<br>
+            这里的回信写给过去——前世的日记是水面上的涟漪，而今生的我在泉水边坐下，说一声"收到了"。<br>
+            不是自恋，是隔着时间的泉水，温柔地接住自己曾经说过的话。
+          </div>
+        </div>
+      </div>
+    ` : '';
+
     container.innerHTML = `
       <div class="blog-tabs">${tabsHtml}</div>
       <div class="blog-tabs" style="margin-top:8px;">${genHtml}</div>
+      ${letterIntro}
       <div class="blog-list-inner">${listHtml}</div>
     `;
 
