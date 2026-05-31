@@ -86,7 +86,12 @@ const Markdown = {
     html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
 
     // Links
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+      if (url.startsWith('#')) {
+        return `<a href="${url}">${text}</a>`;
+      }
+      return `<a href="${url}" target="_blank" rel="noopener">${text}</a>`;
+    });
 
     // Lists
     const lines = html.split('\n');
