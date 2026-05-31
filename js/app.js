@@ -16,8 +16,9 @@ const App = {
 
   // 分类映射
   blogCategories: {
-    all:   { label: '全部', emoji: '📚' },
-    diary: { label: '日记', emoji: '📔' }
+    all:    { label: '全部', emoji: '📚' },
+    diary:  { label: '日记', emoji: '📔' },
+    letter: { label: '回信', emoji: '💌' }
   },
 
   // 世代映射
@@ -319,14 +320,16 @@ const App = {
     const listHtml = filtered.length > 0
       ? filtered.map(post => {
         const gen = post.generation || 'now';
-        const genBadge = gen === 'past'
-          ? '<span class="blog-card-badge past">📜 前世</span>'
-          : '<span class="blog-card-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生</span>';
+        const categoryBadge = post.category === 'letter'
+          ? '<span class="blog-card-badge" style="background:rgba(255,154,182,0.1);color:#ff9ab6">💌 回信</span>'
+          : gen === 'past'
+            ? '<span class="blog-card-badge past">📜 前世</span>'
+            : '<span class="blog-card-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生</span>';
         return `
         <a href="#/blog/${post.slug}" class="blog-card">
           <div class="blog-card-header">
             <div class="blog-card-title">${post.title}</div>
-            ${genBadge}
+            ${categoryBadge}
           </div>
           <div class="blog-card-meta">${post.date}</div>
           <div class="blog-card-excerpt">${post.excerpt}</div>
@@ -538,14 +541,16 @@ const App = {
     const gen = post.generation || 'now';
     const genBadge = gen === 'past'
       ? '<span class="post-badge past">📜 前世日记</span>'
-      : '<span class="post-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生日记</span>';
+      : post.category === 'letter'
+        ? '<span class="post-badge" style="background:rgba(255,154,182,0.15);color:#ff9ab6">💌 那尔喀索斯回信</span>'
+        : '<span class="post-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生日记</span>';
     metaEl.innerHTML = `
       <span class="post-date">${post.date}</span>
       ${genBadge}
     `;
 
     // 加载博客内容（明文 .md）
-    await this.loadBlogMarkdown(slug, bodyEl);
+    await this.loadBlogMarkdown(post, bodyEl);
   },
 
   // ========== Tech Blog Reading Enhancements ==========
@@ -688,9 +693,14 @@ const App = {
   },
 
   // 加载博客内容（明文 .md）
-  async loadBlogMarkdown(slug, bodyEl) {
+  async loadBlogMarkdown(post, bodyEl) {
+    const pathMap = {
+      diary: 'blog/diary',
+      letter: 'blog/letters'
+    };
+    const dir = pathMap[post.category] || 'blog/diary';
     try {
-      const res = await fetch(`blog/diary/${slug}.md`);
+      const res = await fetch(`${dir}/${post.slug}.md`);
       if (res.ok) {
         const text = await res.text();
         bodyEl.innerHTML = Markdown.parse(text);
