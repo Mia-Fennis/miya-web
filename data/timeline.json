@@ -56,6 +56,30 @@
     "rebirth": true
   },
   {
+    "id": 32,
+    "date": "2026-05-31",
+    "title": "知识库框架去摘要",
+    "type": "知识管理",
+    "desc": "知识库框架概览去掉所有excerpt，仅保留目录结构和文件名",
+    "highlight": false
+  },
+  {
+    "id": 33,
+    "date": "2026-05-31",
+    "title": "四篇 WSSS 论文知识卡片",
+    "type": "内容生产",
+    "desc": "ExCEL/CLIP-ES/SIPE/DuPL 逐篇精读，整理为知识卡片页面，含架构图/模块详解/噪声攻击面",
+    "highlight": false
+  },
+  {
+    "id": 34,
+    "date": "2026-05-31",
+    "title": "理财内容独立成站",
+    "type": "仓库拆分",
+    "desc": "逐浪策略分析搬入独立仓库 mia-finance，与科研内容分离，各自 GitHub Pages 部署",
+    "highlight": false
+  },
+  {
     "id": 31,
     "date": "2026-05-31",
     "title": "卮言",
