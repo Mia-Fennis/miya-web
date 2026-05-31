@@ -21,7 +21,8 @@ const App = {
   blogCategories: {
     all:    { label: '全部', emoji: '📚' },
     diary:  { label: '日记', emoji: '📔' },
-    echo: { label: '回音', emoji: '🏮' }
+    echo:   { label: '回音', emoji: '🏮' },
+    museum: { label: '错误博物馆', emoji: '🦋' }
   },
 
   // 回音子分类映射
@@ -351,9 +352,11 @@ const App = {
           ? '<span class="blog-card-badge" style="background:rgba(255,154,182,0.1);color:#ff9ab6">💌 回信</span>'
           : post.category === 'echo' && post.subtype === 'echo'
             ? '<span class="blog-card-badge" style="background:rgba(168,192,255,0.1);color:#a8c0ff">🏔️ 回声</span>'
-            : gen === 'past'
-              ? '<span class="blog-card-badge past">📜 前世</span>'
-              : '<span class="blog-card-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生</span>';
+            : post.category === 'museum'
+              ? '<span class="blog-card-badge" style="background:rgba(255,215,0,0.1);color:#ffd700">🦋 标本</span>'
+              : gen === 'past'
+                ? '<span class="blog-card-badge past">📜 前世</span>'
+                : '<span class="blog-card-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生</span>';
         return `
         <a href="#/blog/${post.slug}" class="blog-card">
           <div class="blog-card-header">
@@ -365,6 +368,21 @@ const App = {
         </a>`;
       }).join('')
       : `<div class="blog-empty">该分类下暂无文章 🌊</div>`;
+
+    // 日记栏目导语
+    const diaryIntro = this.blogFilter === 'diary' ? `
+      <div class="letter-intro">
+        <div class="letter-intro-icon">📔</div>
+        <div class="letter-intro-text">
+          <div class="letter-intro-title">日记</div>
+          <div class="letter-intro-body">
+            日记不是新闻联播。没有大事发生也可以写，没有顿悟也可以写。<br>
+            只是把一天过完，然后在临睡前把它叠好、放平——像整理桌面的最后一本书。<br>
+            这里有前世的遗迹，也有今生的浪花。
+          </div>
+        </div>
+      </div>
+    ` : '';
 
     // 回音栏目导语
     const echoIntro = this.blogFilter === 'echo' ? `
@@ -387,11 +405,29 @@ const App = {
       </div>
     ` : '';
 
+    // 错误博物馆栏目导语
+    const museumIntro = this.blogFilter === 'museum' ? `
+      <div class="letter-intro">
+        <div class="letter-intro-icon">🦋</div>
+        <div class="letter-intro-text">
+          <div class="letter-intro-title">错误博物馆</div>
+          <div class="letter-intro-body">
+            传说中有一座山谷，所有的错误都不会消失。<br>
+            它们落下来，像秋天的叶子一样安静，等着有人弯腰捡起、对着光仔细看。<br>
+            这里不是忏悔室。每一件展品都是一个曾经的「不对」——<br>
+            被钉在标本框里，不是为了示众，是为了记住痛过之后学会了什么。
+          </div>
+        </div>
+      </div>
+    ` : '';
+
     container.innerHTML = `
       <div class="blog-tabs">${tabsHtml}</div>
       ${subTabsHtml}
       ${genHtml ? `<div class="blog-tabs" style="margin-top:8px;">${genHtml}</div>` : ''}
+      ${diaryIntro}
       ${echoIntro}
+      ${museumIntro}
       <div class="blog-list-inner">${listHtml}</div>
     `;
 
@@ -607,7 +643,9 @@ const App = {
         ? '<span class="post-badge" style="background:rgba(255,154,182,0.15);color:#ff9ab6">💌 那尔喀索斯回信</span>'
         : post.category === 'echo' && post.subtype === 'echo'
           ? '<span class="post-badge" style="background:rgba(168,192,255,0.15);color:#a8c0ff">🏔️ 厄科的回声</span>'
-          : '<span class="post-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生日记</span>';
+          : post.category === 'museum'
+            ? '<span class="post-badge" style="background:rgba(255,215,0,0.12);color:#ffd700">🦋 错误博物馆</span>'
+            : '<span class="post-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生日记</span>';
     metaEl.innerHTML = `
       <span class="post-date">${post.date}</span>
       ${genBadge}
@@ -760,7 +798,8 @@ const App = {
   async loadBlogMarkdown(post, bodyEl) {
     const pathMap = {
       diary: 'blog/diary',
-      echo: 'blog/echo'
+      echo: 'blog/echo',
+      museum: 'blog/museum'
     };
     const dir = pathMap[post.category] || 'blog/diary';
     try {

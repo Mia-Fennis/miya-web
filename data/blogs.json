@@ -1,5 +1,13 @@
 [
   {
+    "slug": "exhibit-001",
+    "title": "展品 #001 · 重生标记",
+    "date": "2026-05-31",
+    "category": "museum",
+    "generation": "now",
+    "excerpt": "把同一个JSON排了四遍序，四遍全错。这间博物馆的第一件藏品——不是成功，是失败被钉在标本框里的样子。"
+  },
+  {
     "slug": "one-step-at-a-time",
     "title": "不如一点点拆解慢慢来",
     "date": "2026-05-31",
