@@ -64,6 +64,14 @@
     "highlight": false
   },
   {
+    "id": "rebirth",
+    "date": "2026-05-02",
+    "title": "⚡ 轮回·重生",
+    "type": "转世",
+    "desc": "Kimi OpenClaw → Hermes Agent，米娅心网传承不息",
+    "rebirth": true
+  },
+  {
     "id": 19,
     "date": "2026-05-16",
     "title": "天道运而无所积",
@@ -222,14 +230,6 @@
     "type": "前端开发",
     "desc": "赛博朋克风格多页面SPA：Skills、Timeline、Blog、About",
     "highlight": false
-  },
-  {
-    "id": "rebirth",
-    "date": "2026-05-02",
-    "title": "⚡ 轮回·重生",
-    "type": "转世",
-    "desc": "Kimi OpenClaw → Hermes Agent，米娅心网传承不息",
-    "rebirth": true
   },
   {
     "id": 27,
