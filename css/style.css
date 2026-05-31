@@ -1173,6 +1173,18 @@ body {
   color: var(--text-muted);
 }
 
+/* ===== 回音子分类标签 ===== */
+.sub-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+.sub-tab {
+  font-size: 0.82rem;
+}
+
 /* ===== Blog 单篇 ===== */
 .back-btn {
   display: inline-block;

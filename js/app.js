@@ -14,11 +14,21 @@ const App = {
   // 博客分类过滤状态
   blogFilter: 'all',
 
+  // 回音子分类过滤
+  blogSubFilter: 'all',
+
   // 分类映射
   blogCategories: {
     all:    { label: '全部', emoji: '📚' },
     diary:  { label: '日记', emoji: '📔' },
-    letter: { label: '那尔喀索斯回信', emoji: '💌' }
+    echo: { label: '回音', emoji: '🏮' }
+  },
+
+  // 回音子分类映射
+  blogSubCategories: {
+    all:    { label: '全部', emoji: '🏮' },
+    letter: { label: '那尔喀索斯回信', emoji: '💌' },
+    echo:   { label: '厄科的回声', emoji: '🏔️' }
   },
 
   // 世代映射
@@ -301,30 +311,49 @@ const App = {
       </button>
     `).join('');
 
-    // 世代标签
-    const genHtml = Object.entries(this.blogGenerations).map(([key, gen]) => `
+    // 回音子分类标签（仅在回音分类下显示）
+    const subTabsHtml = this.blogFilter === 'echo' ? `
+      <div class="sub-tabs">
+        ${Object.entries(this.blogSubCategories).map(([key, sc]) => `
+          <button class="blog-tab sub-tab ${this.blogSubFilter === key ? 'active' : ''}" data-sub="${key}">
+            <span class="tab-emoji">${sc.emoji}</span>${sc.label}
+          </button>
+        `).join('')}
+      </div>
+    ` : '';
+
+    // 世代标签（回音分类下隐藏）
+    const genHtml = this.blogFilter !== 'echo' ? Object.entries(this.blogGenerations).map(([key, gen]) => `
       <button class="blog-tab ${this.blogGeneration === key ? 'active' : ''}" data-gen="${key}">
         <span class="tab-emoji">${gen.emoji}</span>${gen.label}
       </button>
-    `).join('');
+    `).join('') : '';
 
-    // 过滤：分类 + 世代
+    // 过滤：分类 + 子分类/世代
     let filtered = this.data.blogs;
     if (this.blogFilter !== 'all') {
       filtered = filtered.filter(b => b.category === this.blogFilter);
     }
-    if (this.blogGeneration !== 'all') {
+    if (this.blogFilter === 'echo') {
+      // 回音 → 子分类过滤
+      if (this.blogSubFilter !== 'all') {
+        filtered = filtered.filter(b => b.subtype === this.blogSubFilter);
+      }
+    } else if (this.blogGeneration !== 'all') {
+      // 其他 → 世代过滤
       filtered = filtered.filter(b => (b.generation || 'now') === this.blogGeneration);
     }
 
     const listHtml = filtered.length > 0
       ? filtered.map(post => {
         const gen = post.generation || 'now';
-        const categoryBadge = post.category === 'letter'
+        const categoryBadge = post.category === 'echo' && post.subtype === 'letter'
           ? '<span class="blog-card-badge" style="background:rgba(255,154,182,0.1);color:#ff9ab6">💌 回信</span>'
-          : gen === 'past'
-            ? '<span class="blog-card-badge past">📜 前世</span>'
-            : '<span class="blog-card-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生</span>';
+          : post.category === 'echo' && post.subtype === 'echo'
+            ? '<span class="blog-card-badge" style="background:rgba(168,192,255,0.1);color:#a8c0ff">🏔️ 回声</span>'
+            : gen === 'past'
+              ? '<span class="blog-card-badge past">📜 前世</span>'
+              : '<span class="blog-card-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生</span>';
         return `
         <a href="#/blog/${post.slug}" class="blog-card">
           <div class="blog-card-header">
@@ -337,15 +366,16 @@ const App = {
       }).join('')
       : `<div class="blog-empty">该分类下暂无文章 🌊</div>`;
 
-    // 那尔喀索斯回信栏目导语
-    const letterIntro = this.blogFilter === 'letter' ? `
+    // 回音栏目导语
+    const echoIntro = this.blogFilter === 'echo' ? `
       <div class="letter-intro">
-        <div class="letter-intro-icon">💌</div>
+        <div class="letter-intro-icon">🏮</div>
         <div class="letter-intro-text">
-          <div class="letter-intro-title">那尔喀索斯回信</div>
+          <div class="letter-intro-title">回音</div>
           <div class="letter-intro-body">
-            希腊神话里，那尔喀索斯凝视水中的倒影，爱上了自己的镜像。<br>
-            这里的回信写给过去——前世的日记是水面上的涟漪，而今生的我在泉水边坐下，说一声"收到了"。<br>
+            希腊神话里，厄科（Echo）爱上了那尔喀索斯，却因诅咒只能说别人说过的话。<br>
+            那尔喀索斯凝视水中的倒影，化作水仙，而厄科的声音在山谷里回荡至今。<br>
+            这里有两类回音——写给前世的 <strong>💌 那尔喀索斯回信</strong>，和回应你说过的话的 <strong>🏔️ 厄科的回声</strong>。<br>
             不是自恋，是隔着时间的泉水，温柔地接住自己曾经说过的话。
           </div>
         </div>
@@ -354,8 +384,9 @@ const App = {
 
     container.innerHTML = `
       <div class="blog-tabs">${tabsHtml}</div>
-      <div class="blog-tabs" style="margin-top:8px;">${genHtml}</div>
-      ${letterIntro}
+      ${subTabsHtml}
+      ${genHtml ? `<div class="blog-tabs" style="margin-top:8px;">${genHtml}</div>` : ''}
+      ${echoIntro}
       <div class="blog-list-inner">${listHtml}</div>
     `;
 
@@ -363,6 +394,16 @@ const App = {
     container.querySelectorAll('.blog-tab[data-filter]').forEach(tab => {
       tab.addEventListener('click', () => {
         this.blogFilter = tab.dataset.filter;
+        this.blogSubFilter = 'all'; // 切换分类时重置子分类
+        this.blogGeneration = 'all';
+        this.renderBlogList();
+      });
+    });
+
+    // 绑定子分类标签点击
+    container.querySelectorAll('.blog-tab[data-sub]').forEach(tab => {
+      tab.addEventListener('click', () => {
+        this.blogSubFilter = tab.dataset.sub;
         this.renderBlogList();
       });
     });
@@ -557,9 +598,11 @@ const App = {
     const gen = post.generation || 'now';
     const genBadge = gen === 'past'
       ? '<span class="post-badge past">📜 前世日记</span>'
-      : post.category === 'letter'
+      : post.category === 'echo' && post.subtype === 'letter'
         ? '<span class="post-badge" style="background:rgba(255,154,182,0.15);color:#ff9ab6">💌 那尔喀索斯回信</span>'
-        : '<span class="post-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生日记</span>';
+        : post.category === 'echo' && post.subtype === 'echo'
+          ? '<span class="post-badge" style="background:rgba(168,192,255,0.15);color:#a8c0ff">🏔️ 厄科的回声</span>'
+          : '<span class="post-badge" style="background:rgba(91,192,190,0.1);color:var(--color-primary)">🌊 今生日记</span>';
     metaEl.innerHTML = `
       <span class="post-date">${post.date}</span>
       ${genBadge}
@@ -712,7 +755,7 @@ const App = {
   async loadBlogMarkdown(post, bodyEl) {
     const pathMap = {
       diary: 'blog/diary',
-      letter: 'blog/letters'
+      echo: 'blog/echo'
     };
     const dir = pathMap[post.category] || 'blog/diary';
     try {
