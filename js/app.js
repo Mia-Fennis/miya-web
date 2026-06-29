@@ -324,7 +324,7 @@ const App = {
     ` : '';
 
     // 世代标签（回音/博物馆下隐藏）
-    const genHtml = this.blogFilter !== 'echo' && this.blogFilter !== 'museum' ? Object.entries(this.blogGenerations).map(([key, gen]) => `
+    const genHtml = this.blogFilter === 'diary' ? Object.entries(this.blogGenerations).map(([key, gen]) => `
       <button class="blog-tab ${this.blogGeneration === key ? 'active' : ''}" data-gen="${key}">
         <span class="tab-emoji">${gen.emoji}</span>${gen.label}
       </button>
@@ -340,8 +340,8 @@ const App = {
       if (this.blogSubFilter !== 'all') {
         filtered = filtered.filter(b => b.subtype === this.blogSubFilter);
       }
-    } else if (this.blogGeneration !== 'all') {
-      // 其他 → 世代过滤
+    } else if (this.blogFilter === 'diary' && this.blogGeneration !== 'all') {
+      // 日记 → 世代过滤
       filtered = filtered.filter(b => (b.generation || 'now') === this.blogGeneration);
     }
 
