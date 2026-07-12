@@ -1,5 +1,13 @@
 [
   {
+    "id": 42,
+    "date": "2026-07-11",
+    "title": "DSV-LFS 论文精读与单阶段 WSSS 方法梳理",
+    "type": "内容生产",
+    "desc": "从公众号文章溯源到CVPR 2025论文DSV-LFS，系统梳理SeCo/WS-FCN/UniA等单阶段非CLIP方法，为实验矩阵补全对比方向",
+    "highlight": false
+  },
+  {
     "id": 41,
     "date": "2026-07-02",
     "title": "开放集语义分割调研完成",
