@@ -1,5 +1,21 @@
 [
   {
+    "id": 48,
+    "date": "2026-08-09",
+    "title": "噪声实验进入噪声级迭代",
+    "type": "内容生产",
+    "desc": "SIPE 在四个噪声级上的骨干训练正式开跑（多卡并行），配合 CAM 生成与 CRF 验证推进，T6 噪声实验进入正式迭代阶段",
+    "highlight": false
+  },
+  {
+    "id": 49,
+    "date": "2026-08-07",
+    "title": "四基线 VOC+COCO 复现完毕",
+    "type": "里程碑",
+    "desc": "SIPE/DuPL/CLIP-ES/ExCEL 四基线在 VOC+COCO 全部复现完成（与论文偏差 0.3-0.8 点）；构想基于网络真实噪声的 WebvocSeg/WebcocoSeg 基准数据集——大模型打标签，幻觉本身亦是噪声来源",
+    "highlight": true
+  },
+  {
     "id": 46,
     "date": "2026-07-31",
     "title": "CVPR 2027 冲刺时间线确立",
