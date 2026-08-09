@@ -12,7 +12,7 @@
     "date": "2026-08-07",
     "title": "四基线 VOC+COCO 复现完毕",
     "type": "里程碑",
-    "desc": "SIPE/DuPL/CLIP-ES/ExCEL 四基线在 VOC+COCO 全部复现完成（与论文偏差 0.3-0.8 点）；构想基于网络真实噪声的 WebvocSeg/WebcocoSeg 基准数据集——大模型打标签，幻觉本身亦是噪声来源",
+    "desc": "SIPE/DuPL/CLIP-ES/ExCEL 四基线在 VOC+COCO 全部复现完成（与论文偏差 0.3-0.8 点）",
     "highlight": true
   },
   {
