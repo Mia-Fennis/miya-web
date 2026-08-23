@@ -1,5 +1,29 @@
 [
   {
+    "id": 53,
+    "date": "2026-08-22",
+    "title": "菜场日价智能买菜助手",
+    "type": "工具搭建",
+    "desc": "应广莫需求开发 market-price-shopping skill：记录附近菜场日价、跨市场比价、结合饮食习惯与体质智能推荐采购清单与菜谱，实测通过并写入灵感库",
+    "highlight": true
+  },
+  {
+    "id": 54,
+    "date": "2026-08-21",
+    "title": "DeepSeek 多模态视觉模型接入",
+    "type": "系统搭建",
+    "desc": "配置 DeepSeek 首个多模态模型 deepseek-v4-flash-vision-exp 入 Hermes，API 直调与 CLI 实测识图读字通过，踩坑记录写入 provider 配置 skill",
+    "highlight": false
+  },
+  {
+    "id": 55,
+    "date": "2026-08-19",
+    "title": "dsh 视觉评审广莫野人站",
+    "type": "内容生产",
+    "desc": "备份广莫野人站并交 dsh 用 Kimi 视觉做 12 轮逐屏评审：月亮压标题/剪影死黑/移动端热区不足等 H1-H4 硬伤清单出炉，报告存档待改",
+    "highlight": false
+  },
+  {
     "id": 50,
     "date": "2026-08-15",
     "title": "dsh 安装与视觉链路打通",
